@@ -2,9 +2,9 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2.credentials import Credentials
 from encrypt_decrypt.decrypt import decrypt_json
-from cloud_related import download_video
+from cloud_related.download_video import download_file_from_link
 from utils.process_video import process_video_file
-from cloud_related import get_video_links
+from cloud_related.get_video_links import get_files_with_links
 
 from googleapiclient.errors import HttpError
 
@@ -78,7 +78,7 @@ passphrase = os.getenv("PASSWORD")
 parent_handle = 'p0pR3D4C'
 
 decrypted_data = decrypt_json("encrypted_data.json", passphrase)
-videos_links_data = get_video_links(parent_handle)
+videos_links_data = get_files_with_links(parent_handle)
 
 # Load credentials from the token.json file (assuming you've already authenticated)
 credentials = Credentials.from_authorized_user_info(decrypted_data, ['https://www.googleapis.com/auth/youtube.upload'])
@@ -94,7 +94,7 @@ for index,video_obj in enumerate(videos_links_data):
     link = video_obj['link']
     file_name = video_obj['file_name']
 
-    video_downloded_path = download_video(link)
+    video_downloded_path = download_file_from_link(link)
     
     if video_downloded_path:
         playlist_id = "PLMfzrR_Qa8ifWH43CsVL_jqEfzkLVJFcO"  # Replace with your playlist ID
