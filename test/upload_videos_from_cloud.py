@@ -75,7 +75,7 @@ def add_video_to_playlist(youtube, video_id, playlist_id):
 passphrase = os.getenv("PASSWORD")
 parent_handle = 'p0pR3D4C'
 
-print(os.listdir())
+print(os.listdir('test'))
 decrypted_data = decrypt_json("encrypted_data.json", passphrase)
 videos_links_data = get_video_links(parent_handle)
 
