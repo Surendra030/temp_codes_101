@@ -29,6 +29,6 @@ jobs:
           MONGO_URL: ${{ secrets.MONGO_URL }}
           PASSWORD: ${{secrets.PASSWORD}}
         run: |
-          python ./test/upload_videos_from_cloud.py
+          python upload_videos_from_cloud.py
 
      

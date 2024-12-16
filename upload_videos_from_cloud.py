@@ -75,7 +75,7 @@ def add_video_to_playlist(youtube, video_id, playlist_id):
 passphrase = os.getenv("PASSWORD")
 parent_handle = 'p0pR3D4C'
 
-decrypted_data = decrypt_json("test/encrypted_data.json", passphrase)
+decrypted_data = decrypt_json("encrypted_data.json", passphrase)
 videos_links_data = get_video_links(parent_handle)
 
 # Load credentials from the token.json file (assuming you've already authenticated)
