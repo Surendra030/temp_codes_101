@@ -2,8 +2,10 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2.credentials import Credentials
 from encrypt_decrypt.decrypt import decrypt_json
-from cloud_related import download_video,get_video_links
+from cloud_related import download_video
 from utils.process_video import process_video_file
+from cloud_related import get_video_links
+
 from googleapiclient.errors import HttpError
 
 import os
