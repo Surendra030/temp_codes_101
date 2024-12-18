@@ -1,30 +1,20 @@
 import os
-import shutil
 from mega import Mega
-
+import time
 def download_file_from_link(link: str) -> bool:
     # Initialize Mega instance and login
     mega = Mega()
-    keys = os.getenv("M_TOKEN").split("_")
+    keys  = os.getenv("M_TOKEN")
+    keys = keys.split("_")    
     m = mega.login(keys[0], keys[1])
 
+    print("File downloading started.")
     # Download the file using the link
-    file_obj = m.download_url(link)
-    if file_obj:
-        # Extract the file name from the file object
-        file_name = file_obj.name
-
-        # Define the destination folder inside 'temp/videos'
-        temp_folder = "videos"
-        os.makedirs(temp_folder, exist_ok=True)  # Create 'temp/videos' if it doesn't exist
-
-        # Define the destination path for the file
-        destination_path = os.path.join(temp_folder, file_name)
-
-        # Move the downloaded file to the videos folder
-        shutil.move(file_name, destination_path)
-        print(f"File moved to: {destination_path}")
-
-        return destination_path
-
-    return False
+    try:
+        file_name = m.download_url(link)  # This should return the file path
+        print("File downloaded successfully.")
+        return file_name  # Ensure it returns the actual file path
+    except Exception as e:
+        print("Error occurred while downloading file.", e)
+        return None 
+   

@@ -35,7 +35,7 @@ def process_video_file(video_path: str, filename: str, part_duration: int = 13 *
         video_part = video.subclip(start_time, end_time)
         
         # Name the video part (e.g., video_part_1, video_part_2, etc.)
-        temp_name = f"{filename}_video_part_{i + 1}.mp4"
+        temp_name = f"{filename}_part_{i + 1}.mp4"
         temp_path = os.path.join(temp_folder, temp_name)
         
         # Write the part to the temp folder

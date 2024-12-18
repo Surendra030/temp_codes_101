@@ -18,7 +18,7 @@ def decrypt_json(input_file: str, passphrase: str) -> dict:
     
     # Decrypt the data
     decrypted_data = cipher.decrypt(encrypted_data).decode()
-    
+    if decrypted_data : print("Decryption completed.")
     # Convert the decrypted data to a Python dictionary
     return json.loads(decrypted_data)
 
