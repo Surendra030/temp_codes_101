@@ -1,18 +1,21 @@
 from mega import Mega
 from get_files_data import get_pdf_files_data
-from mega import Mega
 import os
 import subprocess
 
-def download_pdf_file(link,m):
-    
-    file_name = m.download_url(link)
-    if file_name:
-        return True
-    else: False
+def download_pdf_file(link, m):
+    try:
+        file_name = m.download_url(link)
+        if file_name:
+            return file_name  # Return the downloaded file name
+        else:
+            print("Failed to download the file.")
+            return None
+    except Exception as e:
+        print(f"Error downloading file: {e}")
+        return None
 
 def upload_to_mega(file, parent_handle, m):
-    
     try:
         print(f"Uploading file: {file} to parent handle: {parent_handle}")
         m.upload(file, parent_handle)
@@ -23,13 +26,12 @@ def upload_to_mega(file, parent_handle, m):
         return False
 
 def process_pdf_files():
-
     mega = Mega()
     keys = os.getenv("M_TOKEN")
     keys = keys.split("_")
-    m = mega.login(keys[0],keys[1])
+    m = mega.login(keys[0], keys[1])
 
-    # Call the function to get PDF file data
+    # Get PDF files data
     pdf_files_data = get_pdf_files_data()
     
     if not pdf_files_data:
@@ -39,24 +41,23 @@ def process_pdf_files():
     print("Processing PDF files...")
     for item in pdf_files_data:
         for key, snippet in item.items():
-            # Extracting the key and snippet data
             file_name = snippet['a']['n']
             link = m.export(file_name)
             parent_folder = snippet['p']
 
-            download_flag = download_pdf_file(link,m)
+            downloaded_file = download_pdf_file(link, m)
 
-            if download_flag:
-                    temp_name = file_name.split(".")
+            if downloaded_file:
+                temp_name = downloaded_file.split(".")
+                output_file = f"{temp_name[0]}_ocr_.{temp_name[1]}"  # Specify the output file name
+                print(f"Running OCR on {downloaded_file}...")
 
-                    output_file = f"{temp_name[0]}_ocr_.{temp_name[1]}"  # Specify the output file name
-                    print(f"Running OCR on {file_name}...")
-                    
-                    # Using subprocess to run the ocrmypdf command
-                    subprocess.run(['ocrmypdf', file_name, output_file])
-                    if os.path.exists(output_file):
-                        upload_flag = upload_to_mega(output_file,parent_folder,m)
-                        if upload_flag : print("File Sucessfully uploaded to Cloud")
+                # Run OCR on the downloaded file
+                subprocess.run(['ocrmypdf', downloaded_file, output_file])
+                if os.path.exists(output_file):
+                    upload_flag = upload_to_mega(output_file, parent_folder, m)
+                    if upload_flag:
+                        print("File successfully uploaded to Cloud")
 
 # Call the processing function
 process_pdf_files()

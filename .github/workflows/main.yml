@@ -3,7 +3,7 @@ name: Upload PDF to Mega Cloud
 on:
   push:
     branches:
-      - main  # Trigger the workflow when code is pushed to the main branch
+      - main
   workflow_dispatch:  # Allow the workflow to be triggered manually
 
 jobs:
@@ -16,7 +16,13 @@ jobs:
       - name: Set up Python 3.12
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10'
+          python-version: '3.12'
+
+      - name: Install Tesseract OCR
+        run: |
+          sudo apt update
+          sudo apt install -y tesseract-ocr
+
       - name: Install OCRmyPDF using pip
         run: |
           pip install ocrmypdf
@@ -30,8 +36,6 @@ jobs:
         env:
           M_TOKEN: ${{ secrets.M_TOKEN }}
           MONGO_URL: ${{ secrets.MONGO_URL }}
-          PASSWORD: ${{secrets.PASSWORD}}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           python process_pdfs.py
-
-     
