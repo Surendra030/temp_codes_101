@@ -57,6 +57,7 @@ def process_pdf_files():
                 if os.path.exists(output_file):
                     upload_flag = upload_to_mega(output_file, parent_folder, m)
                     if upload_flag:
+                        os.remove(output_file)
                         print("File successfully uploaded to Cloud")
 
 # Call the processing function
