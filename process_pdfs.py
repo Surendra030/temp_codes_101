@@ -48,7 +48,7 @@ def process_pdf_files():
             downloaded_file = download_pdf_file(link, m)
 
             if downloaded_file:
-                temp_name = downloaded_file.split(".")
+                temp_name = file_name.split(".")
                 output_file = f"{temp_name[0]}_ocr_.{temp_name[1]}"  # Specify the output file name
                 print(f"Running OCR on {downloaded_file}...")
 
