@@ -12,11 +12,11 @@ def get_files_with_links(parent_key: str):
         list: A list of dictionaries containing file names and their shareable links.
     """
     # Get Mega account credentials from environment variable
-    keys  = os.getenv("M_TOKEN")
-    keys = keys.split("_")
+    keys = 'afg154006@gmail.com_megaMac02335!'
     if not keys:
         raise ValueError("Environment variable M_TOKEN is not set or empty.")
     
+    keys = keys.split("_")
     if len(keys) != 2:
         raise ValueError("M_TOKEN should contain two parts separated by an underscore.")
 
@@ -28,7 +28,6 @@ def get_files_with_links(parent_key: str):
     all_files = m.get_files()
     links_lst = []
 
-    count = 0
     for index, (key, snippet) in enumerate(all_files.items(), start=1):
     # Clear the previous output
         os.system("cls" if os.name == "nt" else "clear")
@@ -37,8 +36,7 @@ def get_files_with_links(parent_key: str):
         print(f"Processing snippet {len(all_files)} {index}: {snippet['a']['n']}")
 
         # Process the snippet
-        if snippet['p'] == parent_key and count !=3:
-            count +=1
+        if snippet['p'] == parent_key:
             file_name = snippet['a']['n']
             link = m.export(file_name)
             links_lst.append({
@@ -50,7 +48,7 @@ def get_files_with_links(parent_key: str):
         print(f"Snippet {index} processing completed!")
 
     if  links_lst:
-        print("files found for the given parent key.")
+        print(f"files found for the given parent key.{len(links_lst)}")
     else:
         print("No files found for the given parent key.")
-    return links_lst[3:5]
+    return links_lst[3:11]
