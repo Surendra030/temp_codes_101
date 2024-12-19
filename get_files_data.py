@@ -14,7 +14,7 @@ def get_pdf_files_data():
         c+=1
         print(f"{c}/{l}")
         file_name = snippet['a']['n']
-        if '.pdf' in file_name and 'compress.pdf' not in file_name:
+        if '.pdf' in file_name and 'compress.pdf' not in file_name and 'ocr' not in file_name:
             temp_lst.append({
                 key:snippet
             }) 
