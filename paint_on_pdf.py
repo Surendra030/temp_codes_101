@@ -41,15 +41,16 @@ def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height=2 * 7
             # Add the modified or unmodified page to the writer
             writer.add_page(page)
 
-        # Save the output PDF
-        with open(output_path, "wb") as f:
-            writer.write(f)
-
-        # Remove the original PDF if the output is successfully created
-        if os.path.exists(output_path):
-            os.remove(pdf_path)  # Optional: Remove the original file after modification
-            return True
-        else:
-            return False
+        
+        if writer:
+            os.remove(pdf_file)
+            # Save the output PDF
+            with open(output_path, "wb") as f:
+                writer.write(f)
+            # Remove the original PDF if the output is successfully created
+            if os.path.exists(output_path):
+                return True
+            else:
+                return False
 
 
