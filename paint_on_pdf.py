@@ -45,10 +45,10 @@ def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height=2 * 7
         with open(output_path, "wb") as f:
             writer.write(f)
 
-        # Remove the original PDF if the output is successfully created
-        if os.path.exists(output_path):
-            return True
-        else:
-            return False
+    # Remove the original PDF if the output is successfully created
+    if os.path.exists(output_path):
+        return True
+    else:
+        return False
 
 
