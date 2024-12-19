@@ -20,5 +20,5 @@ def get_pdf_files_data():
             }) 
     
     if temp_lst:
-        return temp_lst[24:]
+        return temp_lst[:11]
     else: return None
