@@ -3,7 +3,7 @@ from reportlab.pdfgen import canvas
 from io import BytesIO
 import os
 
-def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height=2 * 72):
+def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height= 0.5 * 72):
     """
     Modify the specified range of pages in the PDF, painting a white area at the bottom.
     Args:
