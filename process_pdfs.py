@@ -50,7 +50,7 @@ def process_pdf_files():
 
             if downloaded_file:
                 temp_name = file_name.split(".")
-                painted_flag = paint_white_area_on_pages(downloaded_file,downloaded_file)
+                painted_flag = paint_white_area_on_pages(downloaded_file)
                 output_file = f"{temp_name[0]}_paint_ocr_.{temp_name[1]}"  # Specify the output file name
                 
                 print(f"Running OCR on {downloaded_file}...")
@@ -66,6 +66,6 @@ def process_pdf_files():
                 else:
                     print("Output file not exits.")
                     print(os.listdir())
-                    
+
 # Call the processing function
 process_pdf_files()
