@@ -1,4 +1,4 @@
 mega.py
 pyzipper
-PyPDF2==1.28.6
-ReportLab==3.6.12
+PyPDF2
+ReportLab

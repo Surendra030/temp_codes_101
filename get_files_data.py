@@ -17,7 +17,7 @@ def get_pdf_files_data():
         if '.pdf' in file_name and 'compress.pdf' not in file_name:
             temp_lst.append({
                 key:snippet
-            })
+            }) 
     
     if temp_lst:
         return temp_lst
