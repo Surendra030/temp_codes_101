@@ -71,7 +71,6 @@ def process_pdf_files():
                             print("File successfully uploaded to Cloud")
                 else:
                     print("Output file not exits.")
-                    print(os.listdir())
 
 # Call the processing function
 process_pdf_files()
