@@ -50,18 +50,22 @@ def process_pdf_files():
 
             if downloaded_file:
                 temp_name = file_name.split(".")
-                paint_white_area_on_pages(downloaded_file,downloaded_file)
+                painted_flag = paint_white_area_on_pages(downloaded_file,downloaded_file)
                 output_file = f"{temp_name[0]}_paint_ocr_.{temp_name[1]}"  # Specify the output file name
                 
                 print(f"Running OCR on {downloaded_file}...")
-
-                # Run OCR on the downloaded file
-                subprocess.run(['ocrmypdf', downloaded_file, output_file])
-                if os.path.exists(output_file):
-                    upload_flag = upload_to_mega(output_file, parent_folder, m)
-                    if upload_flag:
-                        os.remove(output_file)
-                        print("File successfully uploaded to Cloud")
-
+                
+                if painted_flag and os.path.exists(output_file):
+                    # Run OCR on the downloaded file
+                    subprocess.run(['ocrmypdf', downloaded_file, output_file])
+                    if os.path.exists(output_file):
+                        upload_flag = upload_to_mega(output_file, parent_folder, m)
+                        if upload_flag:
+                            os.remove(output_file)
+                            print("File successfully uploaded to Cloud")
+                else:
+                    print("Output file not exits.")
+                    print(os.listdir())
+                    
 # Call the processing function
 process_pdf_files()
