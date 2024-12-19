@@ -1,5 +1,6 @@
 from mega import Mega
 from get_files_data import get_pdf_files_data
+from paint_on_pdf import paint_white_area_on_pages
 import os
 import subprocess
 
@@ -49,7 +50,9 @@ def process_pdf_files():
 
             if downloaded_file:
                 temp_name = file_name.split(".")
-                output_file = f"{temp_name[0]}_ocr_.{temp_name[1]}"  # Specify the output file name
+                paint_white_area_on_pages(downloaded_file,downloaded_file)
+                output_file = f"{temp_name[0]}_paint_ocr_.{temp_name[1]}"  # Specify the output file name
+                
                 print(f"Running OCR on {downloaded_file}...")
 
                 # Run OCR on the downloaded file
