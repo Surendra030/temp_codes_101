@@ -50,7 +50,13 @@ def process_pdf_files():
 
             if downloaded_file:
                 temp_name = file_name.split(".")
-                painted_flag = paint_white_area_on_pages(downloaded_file)
+                paint_pdf_file_name = 'temp.pdf'
+                painted_flag = paint_white_area_on_pages(downloaded_file,pain_pdf_file_name)
+                
+                if painted_flag and os.path.exists(paint_pdf_file_name):
+                    os.rename(downloaded_file,paint_pdf_file_name)
+                    
+
                 output_file = f"{temp_name[0]}_paint_ocr_.{temp_name[1]}"  # Specify the output file name
                 
                 print(f"Running OCR on {downloaded_file}...")

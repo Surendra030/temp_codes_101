@@ -3,11 +3,12 @@ from reportlab.pdfgen import canvas
 from io import BytesIO
 import os
 
-def paint_white_area_on_pages(pdf_path, start_page=12, height=2 * 72):
+def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height=2 * 72):
     """
     Modify the specified range of pages in the PDF, painting a white area at the bottom.
     Args:
         pdf_path (str): Path to the original PDF.
+        output_path (str): Path to save the modified PDF.
         start_page (int): Starting page number (1-based).
         height (float): Height of the white rectangle in points (1 inch = 72 points).
     """
@@ -40,22 +41,14 @@ def paint_white_area_on_pages(pdf_path, start_page=12, height=2 * 72):
             # Add the modified or unmodified page to the writer
             writer.add_page(page)
 
-        # Define the output path (same as input path)
-        output_path = pdf_path  # Overwrite the input file
-
-        # Remove the original PDF file before saving the new one
-        if os.path.exists(pdf_path):
-            os.remove(pdf_path)
-
         # Save the output PDF
         with open(output_path, "wb") as f:
             writer.write(f)
 
-        # Check if the output file is successfully created
+        # Remove the original PDF if the output is successfully created
         if os.path.exists(output_path):
-            print(f"File saved as: {output_path}")
             return True
         else:
-            print("Error saving the file.")
             return False
+
 
