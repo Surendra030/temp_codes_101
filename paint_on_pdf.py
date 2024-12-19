@@ -25,10 +25,10 @@ def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height=2 * 7
                 page_width = float(page.mediabox.upper_right[0]) - float(page.mediabox.lower_left[0])
                 page_height = float(page.mediabox.upper_right[1]) - float(page.mediabox.lower_left[1])
 
-                # Paint the specified area black (or white, based on earlier instructions)
+                # Paint the specified area (white) at the bottom
                 packet = BytesIO()
                 can = canvas.Canvas(packet, pagesize=(page_width, page_height))
-                can.setFillColorRGB(0, 0, 0)  # Black color (you can change it to white if needed)
+                can.setFillColorRGB(1, 1, 1)  # White color (change to black if needed)
                 can.rect(0, 0, page_width, height, stroke=0, fill=1)
                 can.save()
                 packet.seek(0)
@@ -36,7 +36,7 @@ def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height=2 * 7
                 # Create an overlay from the white rectangle
                 overlay_pdf = PdfReader(packet)
                 overlay_page = overlay_pdf.pages[0]
-                page.merge_page(overlay_page)  # Using merge_page instead of mergePage
+                page.merge_page(overlay_page)  # Merge with the current page
 
             # Add the modified or unmodified page to the writer
             writer.add_page(page)
@@ -47,7 +47,7 @@ def paint_white_area_on_pages(pdf_path, output_path, start_page=12, height=2 * 7
 
         # Remove the original PDF if the output is successfully created
         if os.path.exists(output_path):
-            os.remove(pdf_path)  # Optional: Remove original file after modification
+            os.remove(pdf_path)  # Optional: Remove the original file after modification
             return True
         else:
             return False
