@@ -44,9 +44,9 @@ def save_to_json(data, filename):
 
 # Main logic
 if __name__ == "__main__":
-    start_page = 1
+    start_page = 1_000_001
     # end_page = 3168234
-    end_page = 1_000_001
+    end_page = 2_000_001
 
     base_url = "https://e-hentai.org/?next={}"
     output_file = f"output{end_page}.json"
