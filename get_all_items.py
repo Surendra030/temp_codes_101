@@ -16,7 +16,6 @@ with open("output1.json",'w',encoding='utf-8')as f:
 
 with open("output1.json",'r',encoding='utf-8')as f:
     data = json.load(f)
-    data = data[:2]
 
 def upload_tomega():
     mega  = Mega()
@@ -25,6 +24,7 @@ def upload_tomega():
     m = mega.login(keys[0],keys[1])
     try:
         m.upload("data.json")
+        print("File Uploded Sucessfully.")
     except Exception as e:
         print("Error Failed to upload : ",e)
 

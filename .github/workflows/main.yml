@@ -18,18 +18,18 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Tesseract OCR
-        run: |
-          sudo apt update
-          sudo apt install -y tesseract-ocr
+      # - name: Install Tesseract OCR
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install -y tesseract-ocr
 
-      - name: Install Ghostscript
-        run: |
-          sudo apt install -y ghostscript
+      # - name: Install Ghostscript
+      #   run: |
+      #     sudo apt install -y ghostscript
 
-      - name: Install OCRmyPDF using pip
-        run: |
-          pip install ocrmypdf
+      # - name: Install OCRmyPDF using pip
+      #   run: |
+      #     pip install ocrmypdf
 
       - name: Install dependencies
         run: |
