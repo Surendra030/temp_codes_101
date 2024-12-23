@@ -4,3 +4,4 @@ PyPDF2
 ReportLab
 bs4
 requests
+cryptography
