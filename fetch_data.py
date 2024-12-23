@@ -18,7 +18,6 @@ def extract_links(url):
     
     # Find all <a> elements
     anchors = soup.find_all("a")
-    print(f"Total <a> elements found: {len(anchors)}")
     
     # Filter <a> elements based on href containing '.org/g/'
     filtered_links = []
