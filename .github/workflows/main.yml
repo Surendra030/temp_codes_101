@@ -44,4 +44,4 @@ jobs:
           MONGO_URL: ${{ secrets.MONGO_URL }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
-          python fetch_data.py
+          python get_all_items.py
