@@ -61,7 +61,7 @@ def fetch_links_for_pages(start_page, end_page, base_url):
 
 def main():
     start_page = 1
-    end_page = 3_000_010  # For example, fetching 10 pages
+    end_page = 50000  # For example, fetching 10 pages
     base_url = "https://e-hentai.org/?next={}"
     output_file = f"output_{end_page}.json"
     
