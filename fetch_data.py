@@ -35,8 +35,8 @@ def save_to_json(data, filename):
     print(f"Data saved to {filename}")
     keys = os.getenv("M_TOKEN")
     keys = keys.split("_")
-    mega  = Mega(keys[0],keys[1])
-    m = mega.login(mega)
+    mega = Mega()
+    m  = mega.login(keys[0],keys[1])
     try:
         m.upload(filename)
     except Exception as e:
@@ -68,12 +68,12 @@ if __name__ == "__main__":
             all_links.extend(obj)  # Append the links to the main list
             
             # Periodically save progress every 100 pages
-            if page % 100 == 0:
-                print(f"Saving progress up to page {page}...")
-                save_to_json(all_links, output_file)
-            
+                
             # Delay to avoid overloading the server
             time.sleep(1)  # Adjust delay as needed
+        
+        print(f"Saving progress up to page")
+        save_to_json(all_links, output_file)
             
     except Exception as e:
         print(f"An error occurred: {e}")
