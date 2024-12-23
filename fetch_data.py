@@ -67,13 +67,25 @@ def main():
     
     all_links = []
     
+    # Start the timer to track execution time
+    start_time = time.time()
+    max_runtime = 5.5 * 60 * 60  # 5.5 hours in seconds
+    
     # Using ThreadPoolExecutor to fetch links for 5 pages at a time
     with ThreadPoolExecutor(max_workers=5) as executor:
         futures = []
         
-        # Iterate through pages in chunks (5 at a time)
+        # Iterate through pages in chunks (100 at a time)
         for page_start in range(start_page, end_page + 1, 100):
             page_end = min(page_start + 4, end_page)  # Make sure we don't go beyond the end_page
+            
+            # Check if time exceeded 5.5 hours
+            elapsed_time = time.time() - start_time
+            if elapsed_time > max_runtime:
+                print("Time limit exceeded. Saving collected data...")
+                save_to_json(all_links, output_file)
+                return  # Stop execution
+            
             futures.append(executor.submit(fetch_links_for_pages, page_start, page_end, base_url))
         
         # Wait for all threads to complete and gather results
@@ -81,7 +93,7 @@ def main():
             result = future.result()
             all_links.extend(result)  # Add the result to the main list
     
-    # Save the final collected data
+    # Final saving of data to the file and cloud
     save_to_json(all_links, output_file)
 
 if __name__ == "__main__":
@@ -90,3 +102,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"An error occurred: {e}")
         print("Saving collected data before exiting...")
+        save_to_json([], "error_output.json")  # Optionally save error state
