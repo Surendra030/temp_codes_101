@@ -44,9 +44,9 @@ def save_to_json(data, filename):
 
 # Main logic
 if __name__ == "__main__":
-    start_page = 1_000_001
+    start_page = 2_000_001
     # end_page = 3168234
-    end_page = 2_000_001
+    end_page = 3_000_001
 
     base_url = "https://e-hentai.org/?next={}"
     output_file = f"output{end_page}.json"
@@ -57,7 +57,6 @@ if __name__ == "__main__":
     try:
         for page in range(start_page, end_page + 1):
             url = base_url.format(page)
-            print(f"Fetching data from: {url}")
             
             # Extract links from the current page
             links = extract_links(url)
@@ -70,9 +69,10 @@ if __name__ == "__main__":
             # Periodically save progress every 100 pages
                 
             # Delay to avoid overloading the server
-            time.sleep(1)  # Adjust delay as needed
+              # Adjust delay as needed
         
-        print(f"Saving progress up to page")
+            print(f"progress up to page{page}")
+            time.sleep(1)
         save_to_json(all_links, output_file)
             
     except Exception as e:
