@@ -2,3 +2,5 @@ mega.py
 pyzipper
 PyPDF2
 ReportLab
+bs4
+requests

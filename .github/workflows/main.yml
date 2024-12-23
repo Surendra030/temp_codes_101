@@ -44,4 +44,4 @@ jobs:
           MONGO_URL: ${{ secrets.MONGO_URL }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
-          python process_pdfs.py
+          python fetch_data.py
