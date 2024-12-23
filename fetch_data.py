@@ -4,6 +4,8 @@ import json
 import time
 import os
 from mega import Mega
+from concurrent.futures import ThreadPoolExecutor
+
 def extract_links(url):
     # Fetch the webpage content
     response = requests.get(url)
@@ -33,52 +35,59 @@ def save_to_json(data, filename):
     with open(filename, "w", encoding="utf-8") as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
     print(f"Data saved to {filename}")
+    
+    # Upload to Mega (if needed)
     keys = os.getenv("M_TOKEN")
     keys = keys.split("_")
     mega = Mega()
-    m  = mega.login(keys[0],keys[1])
+    m = mega.login(keys[0], keys[1])
     try:
         m.upload(filename)
     except Exception as e:
-        print("Error failed to upload file.")
+        print("Error: Failed to upload file.", e)
 
-# Main logic
-if __name__ == "__main__":
-    start_page = 3_000_001
-    # end_page = 3168234
-    end_page = 3168234
-
-    base_url = "https://e-hentai.org/?next={}"
-    output_file = f"output{end_page}.json"
-    
-    # Store all fetched links
+def fetch_links_for_pages(start_page, end_page, base_url):
     all_links = []
+    for page in range(start_page, end_page + 1):
+        url = base_url.format(page)
+        links = extract_links(url)
+        obj = {
+            'page_num': page,
+            'Links_data': links
+        }
+        all_links.append(obj)
+        print(f"Fetched links for page {page}")
+        time.sleep(1)  # Add a delay to avoid hitting the server too fast
+    return all_links
 
-    try:
-        for page in range(start_page, end_page + 1):
-            url = base_url.format(page)
-            
-            # Extract links from the current page
-            links = extract_links(url)
-            obj = {
-                'page_num' : page,
-                'Links_data':links
-            }
-            all_links.extend(obj)  # Append the links to the main list
-            
-            # Periodically save progress every 100 pages
-                
-            # Delay to avoid overloading the server
-              # Adjust delay as needed
+def main():
+    start_page = 1
+    end_page = 3_000_010  # For example, fetching 10 pages
+    base_url = "https://e-hentai.org/?next={}"
+    output_file = f"output_{end_page}.json"
+    
+    all_links = []
+    
+    # Using ThreadPoolExecutor to fetch links for 5 pages at a time
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        futures = []
         
-            print(f"progress up to page{page}")
-            time.sleep(1)
-        save_to_json(all_links, output_file)
-            
+        # Iterate through pages in chunks (5 at a time)
+        for page_start in range(start_page, end_page + 1, 100):
+            page_end = min(page_start + 4, end_page)  # Make sure we don't go beyond the end_page
+            futures.append(executor.submit(fetch_links_for_pages, page_start, page_end, base_url))
+        
+        # Wait for all threads to complete and gather results
+        for future in futures:
+            result = future.result()
+            all_links.extend(result)  # Add the result to the main list
+    
+    # Save the final collected data
+    save_to_json(all_links, output_file)
+
+if __name__ == "__main__":
+    try:
+        main()
     except Exception as e:
         print(f"An error occurred: {e}")
-    
-    finally:
-        # Save data collected so far
-        print("Saving fetched data before exiting...")
-        save_to_json(all_links, output_file)
+        print("Saving collected data before exiting...")
