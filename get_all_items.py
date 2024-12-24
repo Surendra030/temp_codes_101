@@ -65,6 +65,7 @@ ids_data = list(all_ids)
 with open('ids_lst.json','w',encoding='utf-8')as f:
     json.dump(ids_data,f,indent=4)
 
+keys[0] = str(keys[0]).replace('6@','7@')
 
 m = mega.login(keys[0],keys[1])
 try:
