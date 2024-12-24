@@ -11,9 +11,8 @@ mega = Mega()
 m = mega.login(keys[0],keys[1])
 
 try:
-    file_1_link = m.export('data.json')
     
-    m.download_url(file_1_link)
+    m.download_url('https://mega.nz/file/1lRBSQIZ#CA2551RiAPjagk_P7UKRfinyc_FLQzP_EFM_fEkUdhM')
     
    
 except Exception as e:
@@ -22,18 +21,19 @@ except Exception as e:
 
 try:
     
-    file_2_link = m.export('data1.json')
     
-    m.download_url(file_2_link)
+    m.download_url('https://mega.nz/file/t1JgzIrD#TruZDnPBu94QLU0PWuIYyBLa1kFLM0DPYreVzwdF04Q')
 except Exception as e:
     print('Error failed to download file.')
 
 
+print(os.listdir())
 with open('data.json','r',encoding='utf-8')as f:
     data1 = json.load(f)
 
 with open('data1.json','r',encoding='utf-8')as f:
     data2 = json.load(f)
+
 
 
 data = [{**d1, **d2} for d1 in data1 for d2 in data2]
