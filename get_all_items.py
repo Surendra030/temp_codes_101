@@ -1,11 +1,12 @@
 import json
 from mega import Mega
 import os
+import gzip
 
 
 keys  = os.getenv("M_TOKEN")
 keys= keys.split("_")
-
+keys[0] = str(keys[0]).replace('6@','7@')
 mega = Mega()
 m = mega.login(keys[0],keys[1])
 
@@ -38,8 +39,14 @@ with open('data1.json','r',encoding='utf-8')as f:
 data = [{**d1, **d2} for d1 in data1 for d2 in data2]
 
 
-with open('final_data.json','w',encoding='utf-8')as f:
-    json.dump(data,f,indent=4)
+# Save and compress the JSON file
+compressed_file = 'final_data_json.gz'
+
+with gzip.open(compressed_file, 'wb') as f:
+    json_str = json.dumps(data, indent=4)  # Convert the JSON data to a string
+    f.write(json_str.encode('utf-8'))  # Compress and save the JSON string as binary
+
+print(f"Compressed JSON file saved as: {compressed_file}")
 
 all_ids = set()
 for main_obj in data:
@@ -61,7 +68,14 @@ with open('ids_lst.json','w',encoding='utf-8')as f:
 
 m = mega.login(keys[0],keys[1])
 try:
-    m.upload('final_data.json')
-    m.upload('ids_lst.json')
+    if os.path.exists(compressed_file):
+        print("filesize : ",os.path.getsize(compressed_file))
+        m.upload(compressed_file)
 except Exception as e:
     print("Failed to upload file.")
+
+try:
+    
+    m.upload('ids_lst.json')
+except Exception as e:
+    print("Failed to upload id-file.")
