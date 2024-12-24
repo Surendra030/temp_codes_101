@@ -17,7 +17,8 @@ with open("output1.json", 'w', encoding='utf-8') as f:
 with open("output1.json", 'r', encoding='utf-8') as f:
     data = json.load(f) 
     l =len(data)//2
-    data=data[:l]
+    l1=l*2
+    data=data[l:l1]
 
 
 
@@ -27,7 +28,7 @@ def upload_tomega():
     keys = keys.split("_")
     m = mega.login(keys[0], keys[1])
     try:
-        m.upload("data.json")
+        m.upload("data1.json")
         print("File Uploaded Successfully.")
     except Exception as e:
         print("Error: Failed to upload:", e)
@@ -89,9 +90,9 @@ except Exception as e:
 
 finally:
     # Save the collected data to a JSON file
-    with open("data.json", 'w', encoding='utf-8') as f:
+    with open("data1.json", 'w', encoding='utf-8') as f:
         json.dump(final_data, f, indent=4)
     
     # Upload the file to Mega
-    if os.path.exists("data.json"):
+    if os.path.exists("data1.json"):
         upload_tomega()
