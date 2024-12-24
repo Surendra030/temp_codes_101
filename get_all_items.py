@@ -8,16 +8,25 @@ keys= keys.split("_")
 
 mega = Mega()
 m = mega.login(keys[0],keys[1])
+
 try:
     file_1_link = m.export('data.json')
     
     m.download_url(file_1_link)
     
-    file_1_link = m.export('data1.json')
-    
-    m.download_url(file_1_link)
+   
 except Exception as e:
     print('Error failed to download file.')
+
+
+try:
+    
+    file_2_link = m.export('data1.json')
+    
+    m.download_url(file_2_link)
+except Exception as e:
+    print('Error failed to download file.')
+
 
 with open('data.json','r',encoding='utf-8')as f:
     data1 = json.load(f)
