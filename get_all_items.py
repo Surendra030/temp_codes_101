@@ -1,98 +1,86 @@
 import json
-import requests
-from bs4 import BeautifulSoup
-import math
-from decrypt import decrypt_json
-import os
 from mega import Mega
-import time
-
-# Example Usage
-passphrase = os.getenv("PASSWORD")  # Replace with your passphrase
-data = decrypt_json("encrypted_data.json", passphrase)
-
-with open("output1.json", 'w', encoding='utf-8') as f:
-    json.dump(data, f, indent=4)
-
-with open("output1.json", 'r', encoding='utf-8') as f:
-    data = json.load(f) 
-    l =len(data)//2
-    l1=l*2
-    data=data[l:l1]
+import os
 
 
+keys  = os.getenv("M_TOKEN")
+keys= keys.split("_")
 
-def upload_tomega():
-    mega = Mega()
-    keys = os.getenv("M_TOKEN")
-    keys = keys.split("_")
-    m = mega.login(keys[0], keys[1])
-    try:
-        m.upload("data1.json")
-        print("File Uploaded Successfully.")
-    except Exception as e:
-        print("Error: Failed to upload:", e)
-
-final_data = []
-
-# Start tracking runtime
-start_time = time.time()
-time_limit = 5.5 * 60 * 60  # 5 hours 30 minutes in seconds
-
+mega = Mega()
+m = mega.login(keys[0],keys[1])
 try:
-    for index, entry_obj in enumerate(data):
-        # Check if runtime exceeds the limit
-        if time.time() - start_time > time_limit:
-            print("Time limit exceeded. Stopping script and saving progress.")
-            break
-        
-        obj_href = entry_obj['href']
-        obj_title = entry_obj['title']
-        obj_total_pages = entry_obj['total_items']
-
-        if 'k' in obj_total_pages:
-            num = str(obj_total_pages).split('k')[0]
-            obj_total_pages = int(num) * 1000
-        else:
-            obj_total_pages = int(entry_obj['total_items'])
-
-        obj_total_pages = math.ceil(obj_total_pages / 25)
-        obj_data = []
-
-        for obj_page in range(obj_total_pages):
-            print(f"{index+1}/{len(data)} => {obj_page}/{obj_total_pages}")
-
-            temp_link = f"{obj_href}/{obj_page+1}"
-            response = requests.get(temp_link)
-            if response.status_code == 200:
-                soup = BeautifulSoup(response.text, 'html.parser')
-                all_anchors = soup.select(".cover")
-                for anchor in all_anchors:
-                    # Safeguard in case there's no 'img' element inside the anchor
-                    img = anchor.find("img")
-                    img_src = img.get('data-src') if img and img.has_attr('data-src') else str(img)
-
-                    # Create a dictionary for each anchor element
-                    obj = {
-                        "href": anchor.get('href'),  # Extract 'href' attribute
-                        "img_source": img_src,       # Extract image source URL
-                        "item_title": anchor.get_text(strip=True)  # Extract the title and clean up whitespace
-                    }
-                    obj_data.append(obj)
-
-        final_obj = {
-            obj_title: obj_data
-        }
-        final_data.append(final_obj)
-
-except Exception as e:
-    print("Error:", e)
-
-finally:
-    # Save the collected data to a JSON file
-    with open("data1.json", 'w', encoding='utf-8') as f:
-        json.dump(final_data, f, indent=4)
+    file_1_link = m.export('data.json')
     
-    # Upload the file to Mega
-    if os.path.exists("data1.json"):
-        upload_tomega()
+    m.download_url(file_1_link)
+    
+    file_1_link = m.export('data1.json')
+    
+    m.download_url(file_1_link)
+except Exception as e:
+    print('Error failed to download file.')
+
+with open('data.json','r',encoding='utf-8')as f:
+    data1 = json.load(f)
+
+with open('data.json1','r',encoding='utf-8')as f:
+    data2 = json.load(f)
+
+
+data = [{**d1, **d2} for d1 in data1 for d2 in data2]
+
+
+
+all_ids = set()
+for main_obj in data:
+    for tag_lst in main_obj:
+        all_titles_obj = main_obj[tag_lst]
+        main_tag = tag_lst
+        for one_title_obj in all_titles_obj:
+            if 'href' in one_title_obj:
+                id_part = str(one_title_obj['href']).split('.net/')[-1]
+                all_ids.add(id_part)
+
+
+    
+ids_data = list(all_ids)
+
+# Preprocess `data` into a hash-based lookup structure
+href_to_tags = {}
+for main_obj in data:
+    for tag_lst in main_obj:
+        all_titles_obj = main_obj[tag_lst]
+        for one_title_obj in all_titles_obj:
+            if 'href' in one_title_obj:
+                href = one_title_obj['href']
+                if href not in href_to_tags:
+                    href_to_tags[href] = []
+                if tag_lst not in href_to_tags[href]:  # Avoid duplicates
+                    href_to_tags[href].append(tag_lst)
+
+# Use a set for `ids_data` for quick membership checks
+ids_set = set(ids_data)
+
+# Build the ids_dict
+ids_dict = {}
+for index, id in enumerate(ids_set):
+    print(f"{index + 1}-{len(ids_set)}")
+    for href, tags in href_to_tags.items():
+        if id in href:  # Quick lookup using the preprocessed dictionary
+            if id not in ids_dict:
+                ids_dict[id] = []
+            # Append unique tags
+            ids_dict[id].extend(tag for tag in tags if tag not in ids_dict[id])
+
+# Convert ids_dict to a list of dictionaries
+ids_lst = [{key: value} for key, value in ids_dict.items()]
+
+# Save the result to a JSON file
+with open("ids_data.json", 'w', encoding='utf-8') as f:
+    json.dump(ids_lst, f, indent=4)
+
+
+m = mega.login(keys[0],keys[1])
+try:
+    m.upload('ids_data.json')
+except Exception as e:
+    print("Failed to upload file.")
