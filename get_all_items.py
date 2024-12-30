@@ -14,6 +14,29 @@ handle = 'OdhCgTJR'
 
 all_files = m.get_files()
 
+with open("final.json",'r',encoding='utf-8')as f:
+    data = json.load(f)
+    
+
+
+
+index = 1
+all_files = []
+
+for obj in data:
+    for old,new in obj.items():
+
+        for key,snippet in all_files.items():
+            file_name =  snippet['a']['n']
+            if snippet['p'] == handle and file_name == old:
+                m.request_id(file_name,new)
+                
+
+            print(f'{index} / {len(data)}')
+            index +=1
+
+
+
 index = 1
 all_files = []
 for key,snippet in all_files.items():
@@ -36,4 +59,3 @@ try:
         m.upload("links_data.json")
 except Exception as e:
     print("Error Failed to upload.",e)
-
