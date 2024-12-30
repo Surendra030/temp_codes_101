@@ -12,11 +12,11 @@ m = mega.login(keys[0],keys[1])
 
 handle = 'OdhCgTJR'
 
-all_files = m.get_files()
+all_files1 = m.get_files()
 
 index = 1
 all_files = []
-for key,snippet in all_files.items():
+for key,snippet in all_files1.items():
     file_name =  snippet['a']['n']
     if snippet['p'] == handle and '.mp4' in file_name:
         link = m.export(file_name)
