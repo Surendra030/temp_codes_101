@@ -13,19 +13,6 @@ m = mega.login(keys[0],keys[1])
 
 all_files = m.get_files()
 
-with open("final.json",'r',encoding='utf-8')as f:
-    data = json.load(f)
-    
-for obj in data:
-    for key,snippet in all_files.items():
-        if snippet['h'] == obj['h']:
-            file_name = snippet['a']['n']
-            file = m.find(file_name)
-            m.rename(file,obj['new_title'])
-
-
-all_files = m.get_files()
-
 lst = []
 for key,snippet in all_files.items():
     if snippet['p'] == 'OdhCgTJR':
@@ -35,9 +22,12 @@ for key,snippet in all_files.items():
             'file_name':file_name,
             'link':link
         }
+        lst.append(obj)
 
 # Step 3: Save the updated data to new.json
 with open("links_data.json", 'w', encoding='utf-8') as f:
     json.dump(lst, f, indent=4)
+
+m.upload("links_data.json")
 
 
