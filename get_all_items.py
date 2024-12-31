@@ -20,7 +20,7 @@ for obj in data:
     for key,snippet in all_files.items():
         if snippet['h'] == obj['h']:
             file_name = snippet['a']['n']
-            m.rename(file_name,obj['new_title'])
+            m.rename(snippet,obj['new_title'])
 
 
 all_files = m.get_files()
