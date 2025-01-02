@@ -8,8 +8,8 @@ from mega import Mega
 
 data = decrypt_json('doy.json','key000')
 
-start = 0
-end = 200
+start = 200
+end = 400
 base = 'https://project-get-source-code.vercel.app/?url='
 
 
@@ -60,7 +60,7 @@ try:
         except Exception as e:
             print("error : ",e)
         time.sleep(4)
-        
+
 except Exception as e:
     print("Error : ",e)
 
