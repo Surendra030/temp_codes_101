@@ -8,8 +8,8 @@ from mega import Mega
 
 data = decrypt_json('doy.json','key000')
 
-start = 0
-end = 101
+start = 101
+end = 201
 base = 'https://project-get-source-code-1.vercel.app/?url='
 data =data[start:end]
 
