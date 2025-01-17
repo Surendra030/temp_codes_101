@@ -6,8 +6,7 @@ import os
 def get_meta_data(video_file):
         
     # Output folder for extracted files
-    output_folder = "extracted_streams"
-    os.makedirs(output_folder, exist_ok=True)
+    output_folder = os.getcwd()
 
     # FFmpeg command to list all streams
     command_list_streams = ["ffmpeg", "-i", video_file]

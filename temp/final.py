@@ -14,7 +14,7 @@ def hardcode_subtitles(video_path, subtitle_path, output_path):
         return
 
     # Path to the locally stored ffmpeg binary (relative path to your repository)
-    ffmpeg_path = './ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
+    ffmpeg_path = './ffmpeg/ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
     
     # Ensure ffmpeg binary exists at the specified path
     if not os.path.exists(ffmpeg_path):
@@ -48,10 +48,12 @@ obj = {
 
 file_name = start_downloading(obj)
 file_name = 'file.mkv'
+
 if file_name and os.path.exists(file_name):
     flag_result =  get_meta_data(file_name)
     # Set paths to the files
-    subtitle_file = 'extracted_streams/subtitle_1.ass'
+    print(os.listdir())
+    subtitle_file = 'subtitle_1.ass'
     output_file = 'output_file.mkv'
 
     # Call the function
