@@ -47,12 +47,8 @@ obj = {
     }
 
 file_name = start_downloading(obj)
-if file_name and os.path.exists(file_name):
+if file_name:
     flag_result =  get_meta_data(file_name)
-
-
-
-
     # Set paths to the files
     subtitle_file = 'extracted_streams/subtitle_1.ass'
     output_file = 'output_file.mkv'
@@ -73,3 +69,4 @@ if file_name and os.path.exists(file_name):
 
         except Exception as e:
             print("Error failed to upload file : ",e)
+else:print(f"{file_name} not found..")
