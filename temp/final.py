@@ -40,19 +40,19 @@ def hardcode_subtitles(video_path, subtitle_path, output_path):
         print(f"Error: Subtitle file '{subtitle_path}' not found.")
         return
 
-    # Generate the output SRT path (same as input subtitle path, but with .srt extension)
-    srt_subtitle_path = subtitle_path.rsplit('.', 1)[0] + '.srt'
+    # # Generate the output SRT path (same as input subtitle path, but with .srt extension)
+    # srt_subtitle_path = subtitle_path.rsplit('.', 1)[0] + '.srt'
     
-    # Step 1: Convert .ass to .srt
-    if not convert_ass_to_srt(subtitle_path, srt_subtitle_path):
-        print("Subtitle conversion failed. Aborting.")
-        return
+    # # Step 1: Convert .ass to .srt
+    # if not convert_ass_to_srt(subtitle_path, srt_subtitle_path):
+    #     print("Subtitle conversion failed. Aborting.")
+    #     return
     
     # Step 2: Build the ffmpeg command to hardcode subtitles into the video
     cmd = [
         'ffmpeg',               # Use local ffmpeg binary
         "-i", video_path,       # Input video file
-        "-i", srt_subtitle_path,  # Input subtitle file (converted .srt)
+        "-i", subtitle_file,  # Input subtitle file (converted .srt)
         "-c:v", "libx264",      # Video codec (H.264)
         "-c:a", "copy",         # Audio codec (copy without re-encoding)
         "-c:s", "mov_text",     # Subtitle codec (to merge subtitles)
