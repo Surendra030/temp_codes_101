@@ -14,7 +14,7 @@ def hardcode_subtitles(video_path, subtitle_path, output_path):
         return
 
     # Path to the locally stored ffmpeg binary (relative path to your repository)
-    ffmpeg_path = '../ffmpeg/ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
+    ffmpeg_path = 'ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
     # Ensure ffmpeg binary exists at the specified path
     if not os.path.exists(ffmpeg_path):
         print(f"Error: ffmpeg binary not found at '{ffmpeg_path}'.")
@@ -50,26 +50,29 @@ file_name = 'file.mkv'
 
 if file_name and os.path.exists(file_name):
     flag_result =  get_meta_data(file_name)
-    # Set paths to the files
-    print(os.listdir(),"\n",os.getcwd())
+    
+    if flag_result:
+            
+        # Set paths to the files
+        print(os.listdir(),"\n",os.getcwd())
 
-    subtitle_file = 'subtitle_1.ass'
-    output_file = 'output_file.mkv'
+        subtitle_file = 'subtitle_1.ass'
+        output_file = 'output_file.mkv'
 
-    # Call the function
-    hardcode_subtitles(file_name, subtitle_file, output_file)
+        # Call the function
+        hardcode_subtitles(file_name, subtitle_file, output_file)
 
-    if os.path.exists(output_file):
-        
-        mega = Mega()
-        keys = os.getenv('M_TOKEN')
-        keys = keys.split("_")
+        if os.path.exists(output_file):
+            
+            mega = Mega()
+            keys = os.getenv('M_TOKEN')
+            keys = keys.split("_")
 
-        try:
+            try:
 
-            m  = mega.login(keys[0],keys[1])
-            m.upload(output_file)
+                m  = mega.login(keys[0],keys[1])
+                m.upload(output_file)
 
-        except Exception as e:
-            print("Error failed to upload file : ",e)
+            except Exception as e:
+                print("Error failed to upload file : ",e)
 else:print(f"{file_name} not found..")
