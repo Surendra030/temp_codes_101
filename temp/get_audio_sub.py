@@ -7,8 +7,9 @@ def get_meta_data(video_file):
         
     # Output folder for extracted files
     output_folder = os.getcwd()
-    ffmpeg_path = './ffmpeg/ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
-
+    # Path to the locally stored ffmpeg binary (relative path to your repository)
+    ffmpeg_path = 'ffmpeg/ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
+    ffmpeg_path = os.path.join(os.getcwd(),ffmpeg_path)
     # FFmpeg command to list all streams
     command_list_streams = [ffmpeg_path, "-i", video_file]
 
