@@ -70,16 +70,19 @@ def hardcode_subtitles(video_path, subtitle_path, output_path):
         print("Subtitle conversion failed. Aborting.")
         return False
     
-    # Step 2: Build the ffmpeg command to hardcode subtitles into the video
     cmd = [
         'ffmpeg', 
         '-loglevel', 'debug',
-        '-i', video_path,       # Input video file
+        '-i', video_path,          # Input video file (for video stream)
+        '-i', 'audio_jpn.m4a',     # Input audio file (for audio stream)
         '-vf', f"subtitles={srt_subtitle_path}",  # Hardcode subtitles filter
-        '-c:v', 'libx264',      # Video codec (H.264)
-        '-c:a', 'copy',         # Audio codec (copy without re-encoding)
-        output_path             # Output file with hardcoded subtitles
+        '-map', '0:v:0',           # Map the video stream from the first input
+        '-map', '1:a:0',           # Map the audio stream from the second input
+        '-c:v', 'libx264',         # Video codec (H.264)
+        '-c:a', 'aac',             # Audio codec (AAC, to ensure compatibility)
+        output_path                # Output file with hardcoded subtitles and specified audio
     ]
+
     
     # Execute the command to hardcode subtitles
     try:
