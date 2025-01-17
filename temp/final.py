@@ -13,16 +13,10 @@ def hardcode_subtitles(video_path, subtitle_path, output_path):
         print(f"Error: Subtitle file '{subtitle_path}' not found.")
         return
 
-    # Path to the locally stored ffmpeg binary (relative path to your repository)
-    ffmpeg_path = 'ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
-    # Ensure ffmpeg binary exists at the specified path
-    if not os.path.exists(ffmpeg_path):
-        print(f"Error: ffmpeg binary not found at '{ffmpeg_path}'.")
-        return
-    
+
     # Build the ffmpeg command
     cmd = [
-        ffmpeg_path,               # Use local ffmpeg binary
+        'ffmpeg',               # Use local ffmpeg binary
         "-i", video_path,          # Input video file
         "-i", subtitle_path,       # Input subtitle file
         "-c:v", "libx264",         # Video codec
@@ -53,8 +47,6 @@ if file_name and os.path.exists(file_name):
     
     if flag_result:
             
-        # Set paths to the files
-        print(os.listdir(),"\n",os.getcwd())
 
         subtitle_file = 'subtitle_1.ass'
         output_file = 'output_file.mkv'
