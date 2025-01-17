@@ -52,4 +52,4 @@ jobs:
           START:	67500
           END:	70000 
         run: |
-          python ./temp/final.py
+          python ./temp/main_file.py
