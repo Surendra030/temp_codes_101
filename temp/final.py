@@ -52,7 +52,8 @@ file_name = 'file.mkv'
 if file_name and os.path.exists(file_name):
     flag_result =  get_meta_data(file_name)
     # Set paths to the files
-    print(os.listdir())
+    print(os.listdir(),"\n",os.getcwd())
+
     subtitle_file = 'subtitle_1.ass'
     output_file = 'output_file.mkv'
 
