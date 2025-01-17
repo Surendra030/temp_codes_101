@@ -47,7 +47,8 @@ obj = {
     }
 
 file_name = start_downloading(obj)
-if file_name:
+file_name = 'file.mkv'
+if file_name and os.path.exists(file_name):
     flag_result =  get_meta_data(file_name)
     # Set paths to the files
     subtitle_file = 'extracted_streams/subtitle_1.ass'
