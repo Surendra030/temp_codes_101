@@ -38,7 +38,12 @@ jobs:
           sudo apt-get install -y poppler-utils
           pip install -r req2.txt
           pip install --upgrade tenacity
-
+        
+      - name: Install FFmpeg
+        run: |
+          # Download the latest FFmpeg release for Ubuntu
+          sudo apt-get install -y ffmpeg
+          
       - name: Download files from Mega
         env:
           M_TOKEN: ${{ secrets.M_TOKEN }}
