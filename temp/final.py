@@ -1,5 +1,7 @@
 from download_video import start_downloading
 from get_audio_sub import get_meta_data
+from split_video import split_video
+
 import os
 import subprocess
 from mega import Mega
@@ -94,6 +96,7 @@ obj = {
     "href": "https://drive.google.com/file/d/1fDzOWm6YBpqRetZIWopAy962ADf5r6nv/view?usp=drive_link"
 }
 
+
 # Download the file
 file_name = start_downloading(obj)
 file_name = 'file.mkv'  # Assuming file was downloaded as 'file.mkv'
@@ -111,21 +114,26 @@ if file_name and os.path.exists(file_name):
             success = hardcode_subtitles(file_name, subtitle_file, output_file)
             if success:
                 print("Subtitle hardcoding completed.")
+                videos_folder = split_video(output_file)
 
-                # Upload the file to Mega if successful
-                if os.path.exists(output_file):
-                    mega = Mega()
-                    keys = os.getenv('M_TOKEN')  # Get credentials from environment
-                    if keys:
-                        keys = keys.split("_")
-                        try:
-                            m = mega.login(keys[0], keys[1])
-                            m.upload(output_file)
-                            print("File uploaded successfully to Mega.")
-                        except Exception as e:
-                            print(f"Error uploading file to Mega: {e}")
-                    else:
-                        print("Mega credentials not found in environment variables.")
+                if os.path.exists(videos_folder):
+                    files_lst = os.listdir(videos_folder)
+                    for file in files_lst:    
+                        file = os.path.join(videos_folder,file)    
+                        if os.path.exists(file):
+                            mega = Mega()
+                            keys = os.getenv('M_TOKEN')  # Get credentials from environment
+                            if keys:
+                                keys = keys.split("_")
+                                try:
+                                    m = mega.login(keys[0], keys[1])
+                                    m.upload(file)
+                                    print("File uploaded successfully to Mega.")
+                                except Exception as e:
+                                    print(f"Error uploading file to Mega: {e}")
+                            else:
+                                print("Mega credentials not found in environment variables.")
+            
         except Exception as e:
             print(f"Error during subtitle hardcoding process: {e}")
 else:
