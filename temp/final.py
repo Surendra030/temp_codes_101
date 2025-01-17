@@ -51,9 +51,12 @@ if file_name and os.path.exists(file_name):
         subtitle_file = 'subtitle_1.ass'
         output_file = 'output_file.mkv'
 
+        try:
         # Call the function
-        hardcode_subtitles(file_name, subtitle_file, output_file)
-
+            hardcode_subtitles(file_name, subtitle_file, output_file)
+        except Exception as e:
+            print("Error failed to execute : ",e)
+        print(os.listdir())
         if os.path.exists(output_file):
             
             mega = Mega()
