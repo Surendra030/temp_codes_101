@@ -15,7 +15,6 @@ def hardcode_subtitles(video_path, subtitle_path, output_path):
 
     # Path to the locally stored ffmpeg binary (relative path to your repository)
     ffmpeg_path = '../ffmpeg/ffmpeg'  # Adjust this path based on where ffmpeg is stored in your repo
-    ffmpeg_path = os.path.join(os.getcwd(),ffmpeg_path)
     # Ensure ffmpeg binary exists at the specified path
     if not os.path.exists(ffmpeg_path):
         print(f"Error: ffmpeg binary not found at '{ffmpeg_path}'.")
