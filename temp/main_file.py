@@ -21,4 +21,4 @@ with open(file_name,'r',encoding='utf')as f:
 obj = data[145:146]
 
 
-main_fun(obj)
+main_fun(obj[0])
