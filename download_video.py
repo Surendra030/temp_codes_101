@@ -30,12 +30,13 @@ def sanitize_title(title):
     """
     Sanitize the title to create a valid filename by removing unwanted characters.
     """
-    sanitized_title = re.sub(r'[\\/*?:"<>|]', "", title)
-    return sanitized_title
+    file_name = re.sub(r'[\\/*?:"<>|]', "", title)
+    return file_name
 
-def download_large_file(download_url, file_id, title):
+def start_downloading(obj):
     driver = webdriver.Chrome()
-
+    download_url = obj['href']
+    title = obj['title']
     try:
         # Open the download URL
         driver.get(download_url)
@@ -50,10 +51,9 @@ def download_large_file(download_url, file_id, title):
             form.submit()
 
             # Extract title and expected size from provided title
-            title_splits = title.split(" ")
+            title_splits = title.split("\n")
             file_size = title_splits[-1]
-            sanitized_title = sanitize_title(" ".join(title_splits[:-1]))
-            file_name = f"{sanitized_title}.download"
+            file_name = title_splits[0]
             expected_size = convert_size_to_bytes(file_size)
 
             # Wait and monitor the file size
@@ -75,9 +75,9 @@ def download_large_file(download_url, file_id, title):
             driver.quit()
 
             # Rename the file and return
-            os.rename(file_name, f"{sanitized_title}.zip")
-            print(f"File downloaded successfully as '{sanitized_title}.zip'.")
-            return f"{sanitized_title}.zip"
+            os.rename(file_name, f"{file_name}.zip")
+            print(f"File downloaded successfully as '{file_name}.zip'.")
+            return f"{file_name}.zip"
 
         else:
             print("File can be downloaded directly without confirmation.")
