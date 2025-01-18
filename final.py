@@ -168,7 +168,7 @@ def main_fun(obj_data_lst):
                     if audio_sub_codes_lst:
                         audio_file_names = audio_sub_codes_lst['audio_codecs']
                         sub_codes = audio_sub_codes_lst['subtitle_codecs']
-
+                        print(audio_sub_codes_lst,"\n",sub_codes,"\n",audio_file_names)
 
                         if 0< len(sub_codes) <=2 :
                             files_count = 0
