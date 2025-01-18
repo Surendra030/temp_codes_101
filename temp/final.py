@@ -109,11 +109,14 @@ def hardcode_subtitles(video_path, subtitle_path,audio_path, output_path):
 
 def main_fun(obj_data_lst):
     try:
+        obj_len = len(obj_data_lst['data'])
         # Initial check for data length
-        if len(obj_data_lst['data']) >= 2:
+        if  obj_len>= 2:
             folder_name = obj_data_lst['data'][0]['title']
             folder_name = sanitize_title(folder_name)
-            obj_data_lst = obj_data_lst[1:]
+        print(obj_len,"\n",obj_data_lst)
+
+        obj_data_lst = obj_data_lst
         
         for index, obj in enumerate(obj_data_lst['data']):
             try:
