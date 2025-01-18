@@ -34,7 +34,17 @@ def sanitize_title(title):
     return file_name
 
 def start_downloading(obj):
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920x1080")
+    options.add_argument("--headless") 
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+
+    chromedriver_path = r"chromedriver"
+    service = Service(executable_path=chromedriver_path)
+    driver = webdriver.Chrome(service=service, options=options)
+
     download_url = obj['href']
     title = obj['title']
     try:
