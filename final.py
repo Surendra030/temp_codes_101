@@ -164,7 +164,7 @@ def main_fun(obj_data_lst):
                     audio_sub_codes_lst = get_meta_data(file_name)
                     audio_sub_codes_lst = audio_sub_codes_lst[0]
                     files = os.listdir()
-
+                    print(files)
                     if audio_sub_codes_lst:
                         audio_file_names = audio_sub_codes_lst['audio_codecs']
                         sub_codes = audio_sub_codes_lst['subtitle_codecs']
