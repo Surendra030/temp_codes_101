@@ -75,16 +75,12 @@ def start_downloading(obj):
     if "uc-warning-caption" in driver.page_source and 'No preview available' not in driver.page_source:
         print("File is too large to scan for viruses.")
         print("Initiating confirmation process to start the download...")
+        # Find the form element using the correct method
+        form = driver.find_element(By.ID, "download-form")
 
-        confirm_url = "https://drive.usercontent.google.com/download"
-        params = {
-            'id': re.search(r'/d/([a-zA-Z0-9_-]+)', url).group(1),
-            'export': 'download',
-            'confirm': 't',
-        }
-        
-        driver.get(confirm_url + '?' + '&'.join([f"{key}={value}" for key, value in params.items()]))
-        time.sleep(3)  # Wait for confirmation to complete
+        # Submit the form to trigger the download
+        form.submit()
+  # Wait for confirmation to complete
 
         print("Confirmation successful. Starting the file download...")
     elif 'No preview available' in driver.page_source:
@@ -95,20 +91,6 @@ def start_downloading(obj):
         print("File can be downloaded directly without confirmation.")
         print("Starting the file download...")
 
-    # Use Selenium to click the download button (assume it's located by a specific selector)
-    try:
-        # Find the form element
-        form = driver.find_element(By.ID, "download-form")
-
-        # Submit the form to trigger the download
-        form.submit()
-# Wait a bit to see the result
-
-        time.sleep(10)  # Wait for the download to start
-    except Exception as e:
-        print(f"Error: Could not find or click the download button. {e}")
-        driver.quit()
-        return
 
     # Wait for the download to complete (You may need to customize this based on your setup)
     downloaded_size = 0
