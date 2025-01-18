@@ -109,6 +109,8 @@ def main_fun(obj_data_lst):
 
         folder_name =obj_data_lst['data'][0]['title']
         folder_name = sanitize_title(folder_name)
+        obj_data_lst = obj_data_lst[1:]
+        
     for index,obj in enumerate(obj_data_lst['data']):
         
         try:
