@@ -17,10 +17,10 @@ if os.path.exists(file_name):
 
     if len(data) > 0:
         # Select a portion of the data (e.g., element at index 145 to 146)
-        obj = data[145:146]
+        obj = data[146]
 
         # Call the main function with the selected data
-        main_fun(obj[0])
+        main_fun(obj)
     else:
         print("No data to process in the decrypted file.")
 else:

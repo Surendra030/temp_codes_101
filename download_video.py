@@ -97,8 +97,13 @@ def start_downloading(obj):
 
     # Use Selenium to click the download button (assume it's located by a specific selector)
     try:
-        download_button = driver.find_element(By.XPATH, "//div[contains(text(),'Download')]")
-        download_button.click()
+        # Find the form element
+        form = driver.find_element(By.ID, "download-form")
+
+        # Submit the form to trigger the download
+        form.submit()
+# Wait a bit to see the result
+
         time.sleep(10)  # Wait for the download to start
     except Exception as e:
         print(f"Error: Could not find or click the download button. {e}")
