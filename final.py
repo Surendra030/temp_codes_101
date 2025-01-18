@@ -9,15 +9,6 @@ import subprocess
 from mega import Mega
 import re
 
-def sanitize_title(title):
-    """
-    Sanitize the title to create a valid filename by removing unwanted characters.
-    """
-    sanitized_title = re.sub(r'[\\/*?:"<>|]', "", title)
-    sanitized_title = re.sub(r'[\[\(].*?[\]\)]', '', title)
-    sanitized_title = sanitized_title.strip()
-
-    return sanitized_title
 
 import re
 
@@ -152,15 +143,14 @@ def main_fun(obj_data_lst):
                 
                 title_splits = obj['title'].split("\n")
                 title = title_splits[0]
-                file_name = sanitize_title(title)  # Sanitize title for filename
  
                 # Download the file
                 file_name_downloaded = start_downloading(obj)
                 
 
                 # Check if file exists
-                if os.path.exists(file_name):
-
+                if os.path.exists(file_name_downloaded):
+                    file_name =  file_name_downloaded
                     print(f"File exists: {file_name}. Retrieving metadata...")
                     audio_sub_codes_lst = get_meta_data(file_name)
                     audio_sub_codes_lst = audio_sub_codes_lst[0]
