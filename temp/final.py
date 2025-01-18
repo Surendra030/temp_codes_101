@@ -203,7 +203,7 @@ def main_fun(obj_data_lst):
                 continue
 
         print("Processing of all files completed.")
-    
+     
     except Exception as e:
         print(f"Critical error in main function: {e}")
         traceback.print_exc()
