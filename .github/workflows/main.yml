@@ -48,7 +48,7 @@ jobs:
         env:
           M_TOKEN: ${{ secrets.M_TOKEN }}
           # MONGO_URL: ${{ secrets.MONGO_URL }}
-          # PASSWORD: ${{ secrets.PASSWORD }}
+          PASSWORD: ${{ secrets.PASSWORD }}
           START:	67500
           END:	70000 
         run: |
