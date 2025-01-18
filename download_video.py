@@ -8,22 +8,31 @@ def sanitize_title(title):
     Sanitize the title to create a valid filename by removing unwanted characters.
     """
     sanitized_title = re.sub(r'[\\/*?:"<>|]', "", title)
+    sanitized_title = re.sub(r'[\[\(].*?[\]\)]', '', title)
+    sanitized_title = sanitized_title.strip()
+
     return sanitized_title
 
-def convert_size_to_bytes(size_str):
-    """
-    Convert a size string like '357.8 MB' to bytes.
-    """
-    size, unit = size_str.split()
+def convert_size_to_bytes(size_str: str) -> int:
+    size_str = size_str.strip()  # Strip any extra spaces
+    parts = size_str.split()
+    
+    if len(parts) == 2:
+        size, unit = parts
+    else:
+        print(f"Unexpected format for size string: {size_str}")
+        return 0  # or handle accordingly
+    
     size = float(size)
-    unit = unit.upper()
-    if unit == 'KB':
-        return int(size * 1024)
-    elif unit == 'MB':
+    if unit.lower() == 'mb':
         return int(size * 1024 * 1024)
-    elif unit == 'GB':
+    elif unit.lower() == 'gb':
         return int(size * 1024 * 1024 * 1024)
-    return int(size)
+    # Add more units as necessary
+    else:
+        print(f"Unknown unit: {unit}")
+        return 0
+
 
 def start_downloading(obj):
     # Example usage

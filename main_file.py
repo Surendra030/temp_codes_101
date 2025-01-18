@@ -6,7 +6,6 @@ from decrypt import decrypt_json
 
 # Get the password from the environment variable
 key_pass = os.getenv("PASSWORD")
-
 # Provide the correct file path (relative or absolute)
 file_name = 'data_encrypted.json'
 

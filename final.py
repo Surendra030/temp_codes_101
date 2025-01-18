@@ -14,7 +14,20 @@ def sanitize_title(title):
     Sanitize the title to create a valid filename by removing unwanted characters.
     """
     sanitized_title = re.sub(r'[\\/*?:"<>|]', "", title)
+    sanitized_title = re.sub(r'[\[\(].*?[\]\)]', '', title)
+    sanitized_title = sanitized_title.strip()
+
     return sanitized_title
+
+import re
+
+def sanitize_folder(title: str) -> str:
+    # Remove content inside [] and () along with the brackets themselves
+    sanitized_title = re.sub(r'[\[\(].*?[\]\)]', '', title)
+    # Remove extra spaces from the start and end
+    sanitized_title = sanitized_title.strip()
+    return sanitized_title
+
 
 
 def convert_time(ass_time):
@@ -56,11 +69,13 @@ def convert_ass_to_srt(ass_path, srt_path):
 
 
 
-def hardcode_subtitles(video_path, subtitle_path,audio_path, output_path):
+
+def hardcode_subtitles(video_path, subtitle_path, audio_path, output_path):
     """
     Hardcodes subtitles into a video by first converting the .ass file to .srt
     and then using the .srt file to merge the subtitles into the video.
     """
+
     # Check if the input video file exists
     if not os.path.exists(video_path):
         print(f"Error: Video file '{video_path}' not found.")
@@ -71,21 +86,29 @@ def hardcode_subtitles(video_path, subtitle_path,audio_path, output_path):
         print(f"Error: Subtitle file '{subtitle_path}' not found.")
         return False
     
-    if '.ass' in  str(subtitle_path):
+    if '.ass' in str(subtitle_path):
         # Generate the output SRT path (same as input subtitle path, but with .srt extension)
         srt_subtitle_path = subtitle_path.rsplit('.', 1)[0] + '.srt'
         
         # Step 1: Convert .ass to .srt
+        print(f"Converting subtitle file {subtitle_path} to {srt_subtitle_path}...")
         if not convert_ass_to_srt(subtitle_path, srt_subtitle_path):
             print("Subtitle conversion failed. Aborting.")
             return False
-        else: srt_subtitle_path = subtitle_path
+        else:
+            print(f"Subtitle conversion successful: {srt_subtitle_path}")
+    
+    # Check the paths of all inputs before calling ffmpeg
+    print(f"Video path: {video_path}")
+    print(f"Audio path: {audio_path}")
+    print(f"Subtitle path: {srt_subtitle_path}")
+    print(f"Output path: {output_path}")
     
     cmd = [
         'ffmpeg', 
         '-loglevel', 'debug',
         '-i', video_path,          # Input video file (for video stream)
-        '-i', audio_path,     # Input audio file (for audio stream)
+        '-i', audio_path,          # Input audio file (for audio stream)
         '-vf', f"subtitles={srt_subtitle_path}",  # Hardcode subtitles filter
         '-map', '0:v:0',           # Map the video stream from the first input
         '-map', '1:a:0',           # Map the audio stream from the second input
@@ -93,7 +116,9 @@ def hardcode_subtitles(video_path, subtitle_path,audio_path, output_path):
         '-c:a', 'aac',             # Audio codec (AAC, to ensure compatibility)
         output_path                # Output file with hardcoded subtitles and specified audio
     ]
-
+    
+    print("Executing ffmpeg command:")
+    print(' '.join(cmd))  # Log the full ffmpeg command being executed
     
     # Execute the command to hardcode subtitles
     try:
@@ -102,6 +127,8 @@ def hardcode_subtitles(video_path, subtitle_path,audio_path, output_path):
         return True
     except subprocess.CalledProcessError as e:
         print(f"Error during ffmpeg execution: {e}")
+        print(video_path, subtitle_path, audio_path, output_path)
+
         return False
 
 
@@ -115,48 +142,56 @@ def main_fun(obj_data_lst):
         # Initial check for data length
         if len(obj_data_lst['data']) >= 2:
             folder_name = obj_data_lst['data'][0]['title']
-            folder_name = sanitize_title(folder_name)
-            obj_data_lst = obj_data_lst[1:]
+            folder_name = sanitize_folder(folder_name)
+            print(folder_name)
         
-        for index, obj in enumerate(obj_data_lst['data']):
+        for index, obj in enumerate(obj_data_lst['data'][1:2]):
             try:
                 print(f"Processing index {index}: {obj.get('title', 'Unknown Title')}")
                 
                 title_splits = obj['title'].split("\n")
                 title = title_splits[0]
                 file_name = sanitize_title(title)  # Sanitize title for filename
-                print(f"Sanitized title: {file_name}")
-
+ 
                 # Download the file
-                file_name = start_downloading(obj)
-                if not file_name:
-                    print(f"Download failed or no file name returned for index {index}")
-                    continue
+                file_name_downloaded = start_downloading(obj)
+                
 
                 # Check if file exists
                 if os.path.exists(file_name):
+
                     print(f"File exists: {file_name}. Retrieving metadata...")
                     audio_sub_codes_lst = get_meta_data(file_name)
-                    
+                    audio_sub_codes_lst = audio_sub_codes_lst[0]
+                    files = os.listdir()
+
                     if audio_sub_codes_lst:
-                        audio_file_names = audio_sub_codes_lst[0]
-                        sub_codes = audio_sub_codes_lst[1]
+                        audio_file_names = audio_sub_codes_lst['audio_codecs']
+                        sub_codes = audio_sub_codes_lst['subtitle_codecs']
 
-                        print(f"Audio files: {audio_file_names}, Sub codes: {sub_codes}")
 
-                        if len(sub_codes) > 0:
-                            subtitle_file = f"subtitle_1.{sub_codes[1] if len(sub_codes) >= 2 else sub_codes[0]}"
-                            output_file = "output_file.mkv"
+                        if 0< len(sub_codes) <=1 :
+                            files_count = 0
+                            print("none : ",sub_codes)
+                            for file in files:
+                                
+                                if str(sub_codes[0]) in file:
+                                    files_count +=1
+
+                            subtitle_file = f"subtitle_{files_count-1}.{sub_codes[0]}"
+                            output_file = f"{file_name.split(".")[0]}.mp4"
 
                             try:
                                 audio_file_len = len(audio_file_names)
                                 if audio_file_len > 0:
+
                                     if audio_file_len >= 2:
-                                        success = hardcode_subtitles(file_name, subtitle_file, audio_file_names[1], output_file)
+                                        success = hardcode_subtitles(file_name, subtitle_file, audio_file_names[0], output_file)
                                     else:
                                         success = hardcode_subtitles(file_name, subtitle_file, audio_file_names[0], output_file)
 
                                     if success:
+
                                         print("Subtitle hardcoding completed successfully.")
                                         videos_folder = split_video(output_file)
                                         print(f"Videos split into folder: {videos_folder}")
@@ -183,6 +218,9 @@ def main_fun(obj_data_lst):
                                                         except Exception as e:
                                                             print(f"Error uploading file '{file_path}' to Mega: {e}")
                                                             traceback.print_exc()
+
+                                                os.remove(file_name)
+
                                         else:
                                             print("Mega credentials not found in environment variables.")
                                     else:
