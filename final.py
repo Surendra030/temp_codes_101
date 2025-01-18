@@ -149,8 +149,8 @@ def main_fun(obj_data_lst):
                 
 
                 # Check if file exists
-                if os.path.exists(file_name_downloaded):
-                    file_name =  file_name_downloaded
+                if os.path.exists(title) :
+                    file_name =  title
                     print(f"File exists: {file_name}. Retrieving metadata...")
                     audio_sub_codes_lst = get_meta_data(file_name)
                     audio_sub_codes_lst = audio_sub_codes_lst[0]
@@ -224,7 +224,7 @@ def main_fun(obj_data_lst):
                     else:
                         print(f"No metadata returned for {file_name}.")
                 else:
-                    print(f"File not found: {file_name}. Skipping...")
+                    print(f"File not found: {file_name}\n{os.listdir()}. Skipping...")
                 
             except Exception as e:
                 print(f"Error at index {index}: {e}")
