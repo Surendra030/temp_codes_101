@@ -1,3 +1,5 @@
+import traceback
+
 from download_video import start_downloading
 from get_audio_sub import get_meta_data
 from split_video import split_video
@@ -107,20 +109,17 @@ def hardcode_subtitles(video_path, subtitle_path,audio_path, output_path):
 
 
 
+
 def main_fun(obj_data_lst):
     try:
-        obj_len = len(obj_data_lst['data'])
         # Initial check for data length
-        if  obj_len>= 2:
+        if len(obj_data_lst['data']) >= 2:
             folder_name = obj_data_lst['data'][0]['title']
             folder_name = sanitize_title(folder_name)
-        print(obj_len,"\n",obj_data_lst)
-
-        obj_data_lst = obj_data_lst
+            obj_data_lst = obj_data_lst[1:]
         
         for index, obj in enumerate(obj_data_lst['data']):
             try:
-                print(obj)
                 print(f"Processing index {index}: {obj.get('title', 'Unknown Title')}")
                 
                 title_splits = obj['title'].split("\n")
@@ -183,12 +182,14 @@ def main_fun(obj_data_lst):
                                                             print(f"Uploaded: {file_path} to Mega.")
                                                         except Exception as e:
                                                             print(f"Error uploading file '{file_path}' to Mega: {e}")
+                                                            traceback.print_exc()
                                         else:
                                             print("Mega credentials not found in environment variables.")
                                     else:
                                         print("Subtitle hardcoding failed.")
                             except Exception as e:
                                 print(f"Error during subtitle hardcoding process: {e}")
+                                traceback.print_exc()
                         else:
                             print(f"No valid subtitles found for {file_name}.")
                     else:
@@ -198,9 +199,11 @@ def main_fun(obj_data_lst):
                 
             except Exception as e:
                 print(f"Error at index {index}: {e}")
+                traceback.print_exc()
                 continue
 
         print("Processing of all files completed.")
     
     except Exception as e:
         print(f"Critical error in main function: {e}")
+        traceback.print_exc()
