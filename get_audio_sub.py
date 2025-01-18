@@ -15,9 +15,8 @@ def get_meta_data(video_file):
     
     try:
         # Run the command and capture the stderr output
-        result = subprocess.run(command_list_streams, stderr=subprocess.PIPE, stdout=subprocess.DEVNULL, text=True)
+        result = subprocess.run(command_list_streams, check=True, stdout=subprocess.DEVNULL)
         output = result.stderr
-        print(output)
         # Extract audio and subtitle streams
         audio_pattern = r"Stream #(\d+:\d+).*: Audio: (\w+)"
         subtitle_pattern = r"Stream #(\d+:\d+).*: Subtitle: (\w+)"
@@ -46,7 +45,7 @@ def get_meta_data(video_file):
             ]
             
             audio_codec.add(audio_file)
-            subprocess.run(extract_audio_command, check=True)
+        subprocess.run(extract_audio_command, check=True, stdout=subprocess.DEVNULL)
 
         subtitle_codecs = set()
         # Extract subtitle streams
@@ -68,7 +67,7 @@ def get_meta_data(video_file):
                 "ffmpeg", "-i", video_file, "-map", f"{stream}", "-c", "copy", output_subtitle,"-y"
             ]
             
-            subprocess.run(extract_subtitle_command, check=True)
+            subprocess.run(extract_subtitle_command, check=True, stdout=subprocess.DEVNULL)
             print(f"Extracted Subtitle Stream {i} to {output_subtitle}")
             subtitle_codecs.add(codec)
 

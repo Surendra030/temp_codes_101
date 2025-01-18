@@ -113,7 +113,7 @@ def hardcode_subtitles(video_path, subtitle_path, audio_path, output_path):
     
     # Execute the command to hardcode subtitles
     try:
-        subprocess.run(cmd, check=True)
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
         print(f"Subtitles have been successfully hardcoded into the video. Output saved as: {output_path}")
         return True
     except subprocess.CalledProcessError as e:
