@@ -117,6 +117,7 @@ def main_fun(obj_data_lst):
         
         for index, obj in enumerate(obj_data_lst['data']):
             try:
+                print(obj)
                 print(f"Processing index {index}: {obj.get('title', 'Unknown Title')}")
                 
                 title_splits = obj['title'].split("\n")
