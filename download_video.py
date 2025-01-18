@@ -2,7 +2,7 @@ import requests
 import re
 import time
 import os
-
+from mega import Mega
 def sanitize_title(title):
     """
     Sanitize the title to create a valid filename by removing unwanted characters.
@@ -25,7 +25,9 @@ def convert_size_to_bytes(size_str):
         return int(size * 1024 * 1024 * 1024)
     return int(size)
 
-def start_downloading(obj):
+
+
+def start_downloading(obj,m,folder_h):
     # Example usage
 
 
@@ -84,9 +86,6 @@ def start_downloading(obj):
             print(f"Failed to download the file after confirmation. Status code: {download_response.status_code}")
             print("Please check the file ID and your network connection.")
 
-    elif 'No preview available' in response.text:
-        print("The file is not downloadable. Google Drive reports 'No preview available'. Exiting the process.")
-        exit()
 
     else:
         print("File can be downloaded directly without confirmation.")
@@ -108,12 +107,18 @@ def start_downloading(obj):
         if actual_size == expected_size:
             print(f"File downloaded successfully as '{file_name}' with the correct size.")
             
-            return file_name
         else:
             print(f"Warning: File downloaded as '{file_name}' but the size ({actual_size / (1024 * 1024):.2f} MB) does not match the expected size ({expected_size / (1024 * 1024):.2f} MB).")
-            return file_name
 
-
-
+    if os.path.exists(file_name):
+        try:
+                
+            m.upload(file_name,folder_h)
+            return True
+        except Exception as e:
+            print("Error failed to upload : ",e)
+    else:
+        print(f"{file_name} not exits..")
+        return False
 
 
