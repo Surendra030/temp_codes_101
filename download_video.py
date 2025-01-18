@@ -45,14 +45,24 @@ def start_downloading(obj):
     service = Service(executable_path=chromedriver_path)
     driver = webdriver.Chrome(service=service, options=options)
 
-    download_url = obj['href']
-    title = obj['title']
+    title_splits = obj['title'].split("\n")
+    url = obj['href']
+
+    title = title_splits[0]
+    file_size = title_splits[-1]
+    file_name = sanitize_title(title)
+    expected_size = convert_size_to_bytes(file_size)
+
+    file_id = re.search(r'/d/([a-zA-Z0-9_-]+)', url).group(1)
+    download_url = f"https://drive.google.com/uc?id={file_id}&export=download"
+
     try:
         # Open the download URL
         driver.get(download_url)
+        page_text = driver.find_element(By.TAG_NAME, "body").text
 
         # Check if "uc-warning-caption" exists
-        if driver.page_source.find("uc-warning-caption") != -1:
+        if 'No preview available' in page_text:
             print("File is too large to scan for viruses.")
             print("Submitting the form to start the download...")
 
@@ -61,10 +71,6 @@ def start_downloading(obj):
             form.submit()
 
             # Extract title and expected size from provided title
-            title_splits = title.split("\n")
-            file_size = title_splits[-1]
-            file_name = title_splits[0]
-            expected_size = convert_size_to_bytes(file_size)
 
             # Wait and monitor the file size
             while True:
