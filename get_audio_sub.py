@@ -17,7 +17,7 @@ def get_meta_data(video_file):
         # Run the command and capture the stderr output
         result = subprocess.run(command_list_streams, stderr=subprocess.PIPE, stdout=subprocess.DEVNULL, text=True)
         output = result.stderr
-
+        print(output)
         # Extract audio and subtitle streams
         audio_pattern = r"Stream #(\d+:\d+).*: Audio: (\w+)"
         subtitle_pattern = r"Stream #(\d+:\d+).*: Subtitle: (\w+)"
