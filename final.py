@@ -170,7 +170,7 @@ def main_fun(obj_data_lst):
                         sub_codes = audio_sub_codes_lst['subtitle_codecs']
 
 
-                        if 0< len(sub_codes) <=1 :
+                        if 0< len(sub_codes) <=2 :
                             files_count = 0
                             print("none : ",sub_codes)
                             for file in files:
@@ -229,7 +229,7 @@ def main_fun(obj_data_lst):
                                 print(f"Error during subtitle hardcoding process: {e}")
                                 traceback.print_exc()
                         else:
-                            print(f"No valid subtitles found for {file_name}.")
+                            print(f"No valid subtitles found for {file_name}/{len(sub_codes)}.")
                     else:
                         print(f"No metadata returned for {file_name}.")
                 else:
