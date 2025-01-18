@@ -104,82 +104,99 @@ def hardcode_subtitles(video_path, subtitle_path,audio_path, output_path):
 
 
 
+
+
+
 def main_fun(obj_data_lst):
-    if len(obj_data_lst['data'])>=2:
-
-        folder_name =obj_data_lst['data'][0]['title']
-        folder_name = sanitize_title(folder_name)
-        obj_data_lst = obj_data_lst[1:]
+    try:
+        # Initial check for data length
+        if len(obj_data_lst['data']) >= 2:
+            folder_name = obj_data_lst['data'][0]['title']
+            folder_name = sanitize_title(folder_name)
+            obj_data_lst = obj_data_lst[1:]
         
-    for index,obj in enumerate(obj_data_lst['data']):
-        
-        try:
+        for index, obj in enumerate(obj_data_lst['data']):
+            try:
+                print(f"Processing index {index}: {obj.get('title', 'Unknown Title')}")
                 
-            title_splits = obj['title'].split("\n")
+                title_splits = obj['title'].split("\n")
+                title = title_splits[0]
+                file_name = sanitize_title(title)  # Sanitize title for filename
+                print(f"Sanitized title: {file_name}")
 
-            title = title_splits[0]
+                # Download the file
+                file_name = start_downloading(obj)
+                if not file_name:
+                    print(f"Download failed or no file name returned for index {index}")
+                    continue
 
-            file_name = sanitize_title(title)# Download the file
-            file_name = start_downloading(obj)
+                # Check if file exists
+                if os.path.exists(file_name):
+                    print(f"File exists: {file_name}. Retrieving metadata...")
+                    audio_sub_codes_lst = get_meta_data(file_name)
+                    
+                    if audio_sub_codes_lst:
+                        audio_file_names = audio_sub_codes_lst[0]
+                        sub_codes = audio_sub_codes_lst[1]
 
-            # Process the file if it exists
-            if file_name and os.path.exists(file_name):
-                audio_sub_codes_lst = get_meta_data(file_name)  # Get metadata
-                
-                if audio_sub_codes_lst:
-                    audio_file_names = audio_sub_codes_lst[0]
-                    sub_codes = audio_sub_codes_lst[1]
+                        print(f"Audio files: {audio_file_names}, Sub codes: {sub_codes}")
 
-                    if len(sub_codes)> 0:
-                        if len(sub_codes) >=2:
-                            subtitle_file = f'subtitle_1.{sub_codes[1]}'  # Input subtitle file
+                        if len(sub_codes) > 0:
+                            subtitle_file = f"subtitle_1.{sub_codes[1] if len(sub_codes) >= 2 else sub_codes[0]}"
+                            output_file = "output_file.mkv"
+
+                            try:
+                                audio_file_len = len(audio_file_names)
+                                if audio_file_len > 0:
+                                    if audio_file_len >= 2:
+                                        success = hardcode_subtitles(file_name, subtitle_file, audio_file_names[1], output_file)
+                                    else:
+                                        success = hardcode_subtitles(file_name, subtitle_file, audio_file_names[0], output_file)
+
+                                    if success:
+                                        print("Subtitle hardcoding completed successfully.")
+                                        videos_folder = split_video(output_file)
+                                        print(f"Videos split into folder: {videos_folder}")
+                                        
+                                        # Upload to Mega
+                                        mega = Mega()
+                                        keys = os.getenv('M_TOKEN')
+                                        if keys:
+                                            keys = keys.split("_")
+                                            keys[0] = keys[0].replace('6@', '8@')
+                                            m = mega.login(keys[0], keys[1])
+
+                                            file = m.create_folder(folder_name)
+                                            folder_handle = file[folder_name]
+                                            
+                                            if os.path.exists(videos_folder):
+                                                files_lst = os.listdir(videos_folder)
+                                                for file in files_lst:
+                                                    file_path = os.path.join(videos_folder, file)
+                                                    if os.path.exists(file_path):
+                                                        try:
+                                                            m.upload(file_path, folder_handle)
+                                                            print(f"Uploaded: {file_path} to Mega.")
+                                                        except Exception as e:
+                                                            print(f"Error uploading file '{file_path}' to Mega: {e}")
+                                        else:
+                                            print("Mega credentials not found in environment variables.")
+                                    else:
+                                        print("Subtitle hardcoding failed.")
+                            except Exception as e:
+                                print(f"Error during subtitle hardcoding process: {e}")
                         else:
-                            subtitle_file = f'subtitle_1.{sub_codes[0]}'  # Input subtitle file
-                        output_file = 'output_file.mkv'  # Output video file
-
-                        try:
-                            audio_file_len = len( audio_file_names)
-                            if audio_file_len>0:
-                            # Call the function to hardcode subtitles
-                                if audio_file_len>=2:
-                                    
-                                    success = hardcode_subtitles(file_name, subtitle_file,audio_file_names[1], output_file)
-                                if audio_file_len<2:
-                                    success = hardcode_subtitles(file_name, subtitle_file,audio_file_names[0], output_file)
-
-                                
-                                if success:
-                                    print("Subtitle hardcoding completed.")
-                                    videos_folder = split_video(output_file)
-                                    mega = Mega()
-                                    keys = os.getenv('M_TOKEN')
-
-                                    keys = keys.split("_")
-                                    keys[0] = keys[0].replace('6@','8@')
-                                    m = mega.login(keys[0], keys[1])
-
-                                    file = m.create_folder(folder_name)
-                                    folder_handle  = file[folder_name]
-                                    if os.path.exists(videos_folder):
-                                        files_lst = os.listdir(videos_folder)
-                                        for file in files_lst:    
-                                            file = os.path.join(videos_folder,file)    
-                                            if os.path.exists(file):
-                                                if keys:
-                                                    
-                                                    try:
-                                                        m.upload(file,folder_handle)
-
-                                                        print("File uploaded successfully to Mega.")
-                                                    except Exception as e:
-                                                        print(f"Error uploading file to Mega: {e}")
-                                                else:
-                                                    print("Mega credentials not found in environment variables.")
-                                
-                        except Exception as e:
-                            print(f"Error during subtitle hardcoding process: {e}")
+                            print(f"No valid subtitles found for {file_name}.")
                     else:
-                        print(f"{file_name} not found or failed to download.")
-            print("Processing all file completed..")
-        except Exception as e:
-            print(f"Error in {index}: ",e)
+                        print(f"No metadata returned for {file_name}.")
+                else:
+                    print(f"File not found: {file_name}. Skipping...")
+                
+            except Exception as e:
+                print(f"Error at index {index}: {e}")
+                continue
+
+        print("Processing of all files completed.")
+    
+    except Exception as e:
+        print(f"Critical error in main function: {e}")
