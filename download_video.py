@@ -1,76 +1,119 @@
+import requests
 import re
 import time
 import os
-import requests
-
 
 def sanitize_title(title):
     """
     Sanitize the title to create a valid filename by removing unwanted characters.
     """
-    file_name = re.sub(r'[\\/*?:"<>|]', "", title)
-    return file_name
+    sanitized_title = re.sub(r'[\\/*?:"<>|]', "", title)
+    return sanitized_title
+
+def convert_size_to_bytes(size_str):
+    """
+    Convert a size string like '357.8 MB' to bytes.
+    """
+    size, unit = size_str.split()
+    size = float(size)
+    unit = unit.upper()
+    if unit == 'KB':
+        return int(size * 1024)
+    elif unit == 'MB':
+        return int(size * 1024 * 1024)
+    elif unit == 'GB':
+        return int(size * 1024 * 1024 * 1024)
+    return int(size)
+
+def start_downloading(obj):
+    # Example usage
 
 
-def start_downloading(obj, chunk_size=1024 * 1024, timeout=10):  # Chunk size = 1 MB
-    try:
-        # Extract title and URL from the object
-        title_splits = obj['title'].split("\n")
-        url = obj['href']
-        title = sanitize_title(title_splits[0])
-        output_file = title
+    """
+    Start downloading the file based on the provided object data.
+    """
+    title_splits = obj['title'].split("\n")
+    url = obj['href']
 
-        print(f"Starting download for: {title} ({url})")
+    title = title_splits[0]
+    file_size = title_splits[-1]
+    file_name = sanitize_title(title)
+    expected_size = convert_size_to_bytes(file_size)
 
-        with requests.get(url, stream=True, timeout=timeout) as response:
-            response.raise_for_status()
-            total_size = int(response.headers.get('Content-Length', 0))
-            downloaded_size = 0
+    file_id = re.search(r'/d/([a-zA-Z0-9_-]+)', url).group(1)
+    download_url = f"https://drive.google.com/uc?id={file_id}&export=download"
 
-            if total_size == 0:
-                print("Warning: Unable to determine file size. Downloading without progress tracking...")
-                with open(output_file, "wb") as file:
-                    for chunk in response.iter_content(chunk_size=chunk_size):
-                        if chunk:
-                            file.write(chunk)
-                            downloaded_size += len(chunk)
-                print(f"\nDownload of {title} complete. (Size: Unknown)")
-                return output_file
+    response = requests.get(download_url, allow_redirects=True)
 
-            # Determine the display unit (MB or GB)
-            if total_size < 1024 * 1024 * 1024:  # Less than 1 GB
-                unit = "MB"
-                size_divisor = 1024 * 1024
+    if "uc-warning-caption" in response.text and 'No preview available' not in response.text:
+        print("File is too large to scan for viruses.")
+        print("Initiating confirmation process to start the download...")
+
+        confirm_url = "https://drive.usercontent.google.com/download"
+        params = {
+            'id': file_id,
+            'export': 'download',
+            'confirm': 't',
+        }
+
+        print(f"Sending confirmation request to url")
+        download_response = requests.get(confirm_url, params=params, stream=True)
+
+        if download_response.status_code == 200:
+            print("Confirmation successful. Starting the file download...")
+            with open(file_name, "wb") as file:
+                downloaded_size = 0
+                last_check_time = time.time()
+                for chunk in download_response.iter_content(chunk_size=1048576):  # 1 MB chunks
+                    file.write(chunk)
+                    downloaded_size += len(chunk)
+
+                    # Check every 10 seconds
+                    current_time = time.time()
+                    if current_time - last_check_time >= 10:
+                        last_check_time = current_time
+                        print(f"Downloaded {downloaded_size / (1024 * 1024):.2f} MB out of {expected_size / (1024 * 1024):.2f} MB")
+
+            # Verify if the download size matches the expected size
+            actual_size = os.path.getsize(file_name)
+            if actual_size == expected_size:
+                print(f"File downloaded successfully as '{file_name}' with the correct size.")
             else:
-                unit = "GB"
-                size_divisor = 1024 * 1024 * 1024
-
-            total_size_display = total_size / size_divisor
-
-            with open(output_file, "wb") as file:
-                for chunk in response.iter_content(chunk_size=chunk_size):
-                    if chunk:  # Filter out keep-alive chunks
-                        file.write(chunk)
-                        downloaded_size += len(chunk)
-                        downloaded_size_display = downloaded_size / size_divisor
-
-                        # Show progress in the correct unit
-                        print(
-                            f"Downloaded {downloaded_size_display:.2f}/{total_size_display:.2f} {unit} "
-                            f"({(downloaded_size / total_size) * 100:.2f}%)",
-                            end="\r"
-                        )
-
-        if os.path.exists(output_file):
-            print(f"\nDownload of {title} complete. (Size: {downloaded_size / size_divisor:.2f} {unit})")
-            return output_file
+                print(f"Warning: File downloaded as '{file_name}' but the size ({actual_size / (1024 * 1024):.2f} MB) does not match the expected size ({expected_size / (1024 * 1024):.2f} MB).")
         else:
-            print(f"Error: File {output_file} not present after download.\nDirectory contents: {os.listdir()}")
-            return None
+            print(f"Failed to download the file after confirmation. Status code: {download_response.status_code}")
+            print("Please check the file ID and your network connection.")
 
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred while downloading {title}: {e}")
-        return None
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        return None
+    elif 'No preview available' in response.text:
+        print("The file is not downloadable. Google Drive reports 'No preview available'. Exiting the process.")
+        exit()
+
+    else:
+        print("File can be downloaded directly without confirmation.")
+        print("Starting the file download...")
+        with open(file_name, "wb") as file:
+            downloaded_size = 0
+            last_check_time = time.time()
+            for chunk in response.iter_content(chunk_size=1048576):
+                file.write(chunk)
+                downloaded_size += len(chunk)
+
+                # Check every 10 seconds
+                current_time = time.time()
+                if current_time - last_check_time >= 10:
+                    last_check_time = current_time
+                    print(f"Downloaded {downloaded_size / (1024 * 1024):.2f} MB out of {expected_size / (1024 * 1024):.2f} MB")
+
+        actual_size = os.path.getsize(file_name)
+        if actual_size == expected_size:
+            print(f"File downloaded successfully as '{file_name}' with the correct size.")
+            
+            return file_name
+        else:
+            print(f"Warning: File downloaded as '{file_name}' but the size ({actual_size / (1024 * 1024):.2f} MB) does not match the expected size ({expected_size / (1024 * 1024):.2f} MB).")
+            return file_name
+
+
+
+
+
