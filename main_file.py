@@ -7,7 +7,7 @@ from upload_before_coded import upload_mkv_files
 from download_video import start_downloading
 from get_meta_data import meta_data_main
 from hardcode_videos import hardcode_all_videos
-from upload_videos import upload_hardcoded_videos_folders
+from upload_videos import upload_hardcoded_videos_folders,deleted_all_videos
 import re
 
 # Get the password from the environment variable
@@ -30,9 +30,11 @@ if os.path.exists(file_name):
         main_obj = data[a_index]
         try:
 
-            for obj in main_obj['data'][1:]:
+            for obj in main_obj['data'][1:2]:
                 start_downloading(obj)
-
+            deleted_all_videos()
+            print("All present videos deleted sucessfully...")
+            
         except Exception as e:
             print(f"Error failed to download data :  {main_obj}")
         try:

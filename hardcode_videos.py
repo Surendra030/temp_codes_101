@@ -151,7 +151,7 @@ def hardcode_all_videos():
                 sub_files.append(file)
                 
         # Get the last audio file if available
-        a_file = audio_files[-1] if len(audio_files) > 0 else None
+        a_file = audio_files[-1] if len(audio_files) >= 1 else audio_files[0]
 
         # Find the subtitle file with the largest word count
         if sub_files:
@@ -172,7 +172,7 @@ def hardcode_all_videos():
                     for sfile in sub_files:
                         os.remove(sfile)
                     for afile in audio_files:
-                        os.remove(a_file)
+                        os.remove(afile)
 
                 except Exception as e:
                     print("Error ",e)   
