@@ -2,8 +2,7 @@ from mega import Mega
 import os
 import json
 
-with open('data.json','r')as f:
-    data = json.load(f)
+
 keys = os.getenv("M_TOKEN")
 
 keys = keys.split("_")
@@ -32,8 +31,8 @@ deleted_all_videos()
 
 def upload_hardcoded_videos_folders(folder_name_lst):
     
-    for folder_name in folder_name_lst:
-
+    for obj   in folder_name_lst:
+        folder_name = obj['folder']
         file = m.create_folder(folder_name)
         f_h = file[folder_name]
 

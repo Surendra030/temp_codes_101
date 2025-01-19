@@ -78,11 +78,7 @@ def split_video_main():
                     folder_name_lst.append(videos_folder)  # Store folder name in the list
 
         # Save the list of processed folders to JSON
-        output_file = "data.json"
-        with open(output_file, 'w') as f:
-            json.dump(hardcoded_files, f, indent=4)
-        print(f"Processed data saved to {output_file}")
-        folder_name_lst.append(output_file)
+
     else:
         print("No files with 'hardcoded' in their name found.")
 
