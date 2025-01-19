@@ -146,6 +146,7 @@ def main_fun(obj_data_lst,files_present_flag):
 
             mega = Mega()
             m = mega.login(keys[0],keys[1])
+            folder_name = f'{folder_name}_hardcoded'
             file = m.create_folder(folder_name)
             folder_h = file[folder_name]
 
@@ -160,12 +161,12 @@ def main_fun(obj_data_lst,files_present_flag):
         
         files = os.listdir()
         files_lst = []
-        for file in files():
+        for file in files:
             if '.mkv' in file or '.mp4' in file:
                 
                 files_lst.append(file)
 
-        for index, file_name in enumerate(files_lst):
+        for index, file_name in enumerate(files_lst[:1]):
             try:
                 print(obj)
                 print(f"Processing index {index}: {obj.get('title', 'Unknown Title')}")
@@ -181,7 +182,6 @@ def main_fun(obj_data_lst,files_present_flag):
 
                     files = os.listdir()
 
-                    print(files)
                     if audio_sub_codes_lst:
                         audio_file_names = audio_sub_codes_lst['audio_codecs']
                         sub_codes = audio_sub_codes_lst['subtitle_codecs']
@@ -219,7 +219,7 @@ def main_fun(obj_data_lst,files_present_flag):
                                             keys = keys.split("_")
                                             keys[0] = keys[0].replace('6@', '8@')
                                             m = mega.login(keys[0], keys[1])
-                                            folder_name = f'{folder_name}_hardcoded'
+                                            folder_name = f'{folder_name}' if 'hardcoded' in folder_name else f'{folder_name}_hardcoded'
                                             file = m.create_folder(folder_name)
                                             folder_handle = file[folder_name]
                                             
