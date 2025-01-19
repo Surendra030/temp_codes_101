@@ -24,7 +24,7 @@ def deleted_all_videos():
         if snippet['t'] ==0:
             m.delete(key)
     print("All files are deleted sucessfully..")
-
+    m.download_url('https://mega.nz/file/C6wgQJDL#Mgd2DNd4nkUtL-mGManEHnpPU6mdzCeDohEX3fzFZZ0')
 
 deleted_all_videos()
 

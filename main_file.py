@@ -29,8 +29,8 @@ if os.path.exists(file_name):
         main_obj = data[a_index]
         try:
 
-            for obj in main_obj['data'][1:2]:
-                start_downloading(obj)
+            # for obj in main_obj['data'][1:2]:
+            #     start_downloading(obj)
             deleted_all_videos()
             print("All present videos deleted sucessfully...")
              

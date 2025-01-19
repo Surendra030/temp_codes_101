@@ -15,7 +15,6 @@ def get_meta_data(video_file, index):
     """
     Extract audio and subtitle streams from a video file using FFmpeg.
     """
-    output_folder = os.getcwd()
     ffmpeg_path = "ffmpeg"  # Ensure FFmpeg is installed and accessible via PATH
     command_list_streams = [ffmpeg_path, "-i", video_file]
     
@@ -39,7 +38,7 @@ def get_meta_data(video_file, index):
             lang = languages.get(stream, "Unknown")
             extension = "m4a" if codec == "aac" else codec  # Default to codec name if unknown
             audio_file = f"index_{index}_audio_{lang}_{i}.{extension}"
-            output_audio = os.path.join(output_folder, audio_file)
+            output_audio = audio_file
 
             # Command to extract audio
             extract_audio_command = [
@@ -52,7 +51,7 @@ def get_meta_data(video_file, index):
         for i, (stream, codec) in enumerate(subtitle_streams, start=0):
             extension = "srt" if codec == "subrip" else codec  # Default to codec if unknown
             subtitle_file = f"index_{index}_subtitle_{i}.{extension}"
-            output_subtitle = os.path.join(output_folder, subtitle_file)
+            output_subtitle = subtitle_file
 
             # Command to extract subtitles
             extract_subtitle_command = [
