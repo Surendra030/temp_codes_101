@@ -24,11 +24,12 @@ from mega import Mega
 def check_files(folder_name):
     keys = os.getenv("M_TOKEN")
     keys = keys.split("_")
-    
+    keys[0] = keys[0].replace('6@','8@')
+
     # Login to Mega
     mega = Mega()
     m = mega.login(keys[0], keys[1])
-    
+
     # Get all files
     all_files = m.get_files()
     
@@ -86,8 +87,8 @@ if os.path.exists(file_name):
     if len(obj['data']) >= 2:
         folder_name = obj['data'][0]['title']
         folder_name = sanitize_folder(folder_name)
-        # lst_data = check_files(folder_name)    
-        lst_data = []
+        lst_data = check_files(folder_name)    
+
         if lst_data and len(lst_data)>0:
             keys = os.getenv("M_TOKEN")
             keys = keys.split("_")
