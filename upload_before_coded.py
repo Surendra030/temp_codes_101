@@ -3,23 +3,16 @@ import subprocess
 from mega import Mega
 import re
 import traceback
-
+from get_mega_instance import fetch_m
 
 
 
 
 def uplox_all_videos(file,m):
-
-
     m.upload(file)
 
 def upload_mkv_files():
-    keys = os.getenv("M_TOKEN")
-
-    keys = keys.split("_")
-    mega  = Mega()
-    keys[0] = keys[0].replace('6@','8@')
-    m = mega.login(keys[0],keys[1])     
+    m = fetch_m()    
 
     all_files = os.listdir()
     lst = []

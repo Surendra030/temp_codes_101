@@ -36,6 +36,7 @@ def split_video(file_path, segment_duration=5 * 60):
         
         total_segments = math.ceil(total_duration / segment_duration)
         file_name, file_ext = os.path.splitext(file_path)
+        file_name = f"{file_name}_do_not_remove_final"
         videos_folder = f'{file_name}_videos'
         os.makedirs(videos_folder, exist_ok=True)
 
@@ -69,6 +70,7 @@ def split_video_main():
         for file in files_lst:
             videos_folder = split_video(file)  # Call your split_video function
             if videos_folder:
+
                 folder_size = get_folder_size(videos_folder)  # Call your get_folder_size function
                 if folder_size > 0:
                     hardcoded_files.append({
@@ -76,8 +78,8 @@ def split_video_main():
                         "size_MB": round(folder_size / (1024 * 1024), 2)  # Convert to MB with 2 decimal places
                     })
                     folder_name_lst.append(videos_folder)  # Store folder name in the list
-
-        # Save the list of processed folders to JSON
+                    os.remove(file)
+        # Save the list of processed  to JSON
 
     else:
         print("No files with 'hardcoded' in their name found.")
