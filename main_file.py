@@ -39,7 +39,7 @@ def check_files(folder_name):
     # Loop through all files
     for key, snippet in all_files.items():
         # Get the file name or folder name
-        file_name = snippet['a']['h']
+        file_name = snippet['a']['n']
         
         # Check if the current item matches the folder name
         if file_name == folder_name and snippet['t'] == 1:
