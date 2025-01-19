@@ -30,11 +30,10 @@ def deleted_all_videos():
 deleted_all_videos()
 
 
-def upload_hardcoded_videos_folders():
-        
-    for obj in data:
+def upload_hardcoded_videos_folders(folder_name_lst):
+    
+    for folder_name in folder_name_lst:
 
-        folder_name = obj['folder']
         file = m.create_folder(folder_name)
         f_h = file[folder_name]
 

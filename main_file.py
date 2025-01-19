@@ -8,7 +8,7 @@ from download_video import start_downloading
 from get_meta_data import meta_data_main
 from hardcode_videos import hardcode_all_videos
 from upload_videos import upload_hardcoded_videos_folders,deleted_all_videos
- 
+from split_video import split_video_main
 
 # Get the password from the environment variable
 key_pass = os.getenv("PASSWORD")
@@ -23,8 +23,7 @@ if os.path.exists(file_name):
 
     data = decrypt_json(file_name, key_pass)
 
-    files_present_flag = False
-    
+    folder_name_lst = []
     if len(data) > 0:
         # Select a portion of the data (e.g., element at index 145 to 146)
         main_obj = data[a_index]
@@ -52,8 +51,13 @@ if os.path.exists(file_name):
         except Exception as e:
             print("Error failed to upload video files : ",e)
         try:
+            folder_name_lst = split_video_main()
+        except Exception as e:
+            print("Error failed to upload video files : ",e)
+                
+        try:
             from upload_videos import upload_hardcoded_videos_folders
-            upload_hardcoded_videos_folders()
+            upload_hardcoded_videos_folders(folder_name_lst)
         except Exception as e:
             print("Error failed to upload video files : ",e)
     

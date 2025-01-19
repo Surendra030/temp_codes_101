@@ -50,28 +50,41 @@ def split_video(file_path, segment_duration=5 * 60):
             subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         print(f"Video splitting completed for {file_path}!")
+        os.remove(file_path)
         return videos_folder
     except Exception as e:
         print(f"Error splitting video {file_path}: {e}")
         return None
 
-# Main Script
-files = os.listdir()
-files_lst = [file for file in files if 'hardcoded' in file]
-hardcoded_files = []
 
-if len(files_lst) > 0:
-    for file in files_lst:
-        videos_folder = split_video(file)
-        if videos_folder:
-            folder_size = get_folder_size(videos_folder)
-            if folder_size > 0:
-                hardcoded_files.append({"folder": videos_folder, "size_MB": folder_size / (1024 * 1024)})
 
-    # Save the list of processed folders to JSON
-    output_file = "data.json"
-    with open(output_file, 'w') as f:
-        json.dump(hardcoded_files, f, indent=4)
-    print(f"Processed data saved to {output_file}")
-else:
-    print("No files with 'hardcoded' in their name found.")
+def split_video_main():
+    # Main Script
+    files = os.listdir()
+    files_lst = [file for file in files if 'hardcoded' in file and file.endswith(('.mp4', '.avi', '.mkv'))]  # Filter for video files
+    hardcoded_files = []
+    folder_name_lst = []
+    
+    if len(files_lst) > 0:
+        for file in files_lst:
+            videos_folder = split_video(file)  # Call your split_video function
+            if videos_folder:
+                folder_size = get_folder_size(videos_folder)  # Call your get_folder_size function
+                if folder_size > 0:
+                    hardcoded_files.append({
+                        "folder": videos_folder, 
+                        "size_MB": round(folder_size / (1024 * 1024), 2)  # Convert to MB with 2 decimal places
+                    })
+                    folder_name_lst.append(videos_folder)  # Store folder name in the list
+
+        # Save the list of processed folders to JSON
+        output_file = "data.json"
+        with open(output_file, 'w') as f:
+            json.dump(hardcoded_files, f, indent=4)
+        print(f"Processed data saved to {output_file}")
+        folder_name_lst.append(output_file)
+    else:
+        print("No files with 'hardcoded' in their name found.")
+
+    return folder_name_lst if len(folder_name_lst)>0 else None
+
