@@ -7,7 +7,7 @@ from upload_before_coded import upload_mkv_files
 from download_video import start_downloading
 from get_meta_data import meta_data_main
 from hardcode_videos import hardcode_all_videos
-from upload_videos import upload_hardcoded_videos_folders
+
 import re
 
 # Get the password from the environment variable
@@ -50,6 +50,7 @@ if os.path.exists(file_name):
         except Exception as e:
             print("Error failed to upload video files : ",e)
         try:
+            from upload_videos import upload_hardcoded_videos_folders
             upload_hardcoded_videos_folders()
         except Exception as e:
             print("Error failed to upload video files : ",e)
