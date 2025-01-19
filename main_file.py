@@ -22,8 +22,6 @@ import os
 from mega import Mega
 
 def check_files(folder_name):
-    # Decrypt the JSON data
-    file_name = os.path.join(os.getcwd(), file_name)
     keys = os.getenv("M_TOKEN")
     keys = keys.split("_")
     
@@ -88,8 +86,8 @@ if os.path.exists(file_name):
     if len(obj['data']) >= 2:
         folder_name = obj['data'][0]['title']
         folder_name = sanitize_folder(folder_name)
-        lst_data = check_files(folder_name)    
-
+        # lst_data = check_files(folder_name)    
+        lst_data = []
         if lst_data and len(lst_data)>0:
             keys = os.getenv("M_TOKEN")
             keys = keys.split("_")
