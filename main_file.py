@@ -16,7 +16,7 @@ key_pass = os.getenv("PASSWORD")
 file_name = 'data_encrypted.json'
 
 
-a_index = 146
+a_index = 148
 
 # Check if the file exists before proceeding
 if os.path.exists(file_name):
