@@ -27,7 +27,7 @@ def convert_size_to_bytes(size_str):
 
 
 
-def start_downloading(obj,m,folder_h):
+def start_downloading(obj):
     # Example usage
 
 
@@ -109,16 +109,4 @@ def start_downloading(obj,m,folder_h):
             
         else:
             print(f"Warning: File downloaded as '{file_name}' but the size ({actual_size / (1024 * 1024):.2f} MB) does not match the expected size ({expected_size / (1024 * 1024):.2f} MB).")
-
-    if os.path.exists(file_name):
-        try:
-                
-            m.upload(file_name,folder_h)
-            return True
-        except Exception as e:
-            print("Error failed to upload : ",e)
-    else:
-        print(f"{file_name} not exits..")
-        return False
-
 
