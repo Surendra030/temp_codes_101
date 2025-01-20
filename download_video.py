@@ -3,11 +3,20 @@ import re
 import time
 import os
 from mega import Mega
+
 def sanitize_title(title):
     """
     Sanitize the title to create a valid filename by removing unwanted characters.
     """
     sanitized_title = re.sub(r'[\\/*?:"<>|]', "", title)
+    return sanitized_title
+
+def hardcoded_sanitize_folder(title: str) -> str:
+    """
+    Sanitize the file name by removing content inside [] and (), along with the brackets.
+    """
+    sanitized_title = re.sub(r'[\[\(].*?[\]\)]', '', title)
+    sanitized_title = sanitized_title.strip()  # Remove extra spaces
     return sanitized_title
 
 def convert_size_to_bytes(size_str):
@@ -27,7 +36,7 @@ def convert_size_to_bytes(size_str):
 
 
 
-def start_downloading(obj):
+def start_downloading(obj,file_name_present):
     # Example usage
 
 
@@ -39,7 +48,18 @@ def start_downloading(obj):
 
     title = title_splits[0]
     file_size = title_splits[-1]
+
     file_name = sanitize_title(title)
+
+    temp_name = hardcoded_sanitize_folder(title)
+
+    temp_file_name = f"{temp_name.split(".")[0]}_hardcoded"
+
+    if temp_file_name in file_name_present:
+        return True
+
+
+
     expected_size = convert_size_to_bytes(file_size)
 
     file_id = re.search(r'/d/([a-zA-Z0-9_-]+)', url).group(1)
