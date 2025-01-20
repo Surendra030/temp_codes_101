@@ -70,7 +70,7 @@ if os.path.exists(file_name):
                 try:
                     try:
                         print(f"{30 * '-'}\n stage : 1")
-                        print(f"{30 * '-'}")
+                        print(f"{30 * '^'}")
 
                         print("Starting downloading process...")
                         start_time = time.time()
@@ -86,7 +86,7 @@ if os.path.exists(file_name):
                         try:
                             print(f"{30 * '-'}\n stage : 2")
 
-                            print(f"{30 * '-'}")
+                            print(f"{30 * '^'}")
                             print("Starting metadata extraction process...")
                             start_time = time.time()
                             meta_data_main()
@@ -99,7 +99,7 @@ if os.path.exists(file_name):
                         try:
                             print(f"{30 * '-'}\n stage : 3")
 
-                            print(f"{30 * '-'}")
+                            print(f"{30 * '^'}")
                             print("Starting video hardcoding process...")
                             start_time = time.time()
                             hardcode_all_videos()
@@ -112,7 +112,7 @@ if os.path.exists(file_name):
 
                             print(f"{30 * '-'}\n stage : 4")
 
-                            print(f"{30 * '-'}")
+                            print(f"{30 * '^'}")
                             print("Starting upload of MKV files...")
                             start_time = time.time()
                             upload_mkv_files()
@@ -127,7 +127,7 @@ if os.path.exists(file_name):
                     try:
                         print(f"{30 * '-'}\n stage : 5")
 
-                        print(f"{30 * '-'}")
+                        print(f"{30 * '^'}")
                         print("Starting video splitting process...")
                         start_time = time.time()
                         split_video_main()
@@ -140,7 +140,7 @@ if os.path.exists(file_name):
                     try:
                         print(f"{30 * '-'}\n stage : 6")
 
-                        print(f"{30 * '-'}")
+                        print(f"{30 * '^'}")
                         print("Starting upload of hardcoded video folders...")
                         start_time = time.time()
                         upload_hardcoded_videos_folders()

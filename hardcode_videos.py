@@ -16,8 +16,7 @@ def convert_time(ass_time):
 
 
 def convert_ass_to_srt(ass_path, srt_path):
-    if os.path.exists(srt_path):
-        os.remove(srt_path)
+
     try:
         with open(ass_path, 'r', encoding='utf-8') as ass_file:
             lines = ass_file.readlines()
@@ -106,7 +105,6 @@ def hardcode_subtitles(video_path, subtitle_path, audio_path, output_path):
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         print(f"Subtitles have been successfully hardcoded into the video. Output saved as: {output_path}")
-        os.remove(srt_subtitle_path)
         return True
     except subprocess.CalledProcessError as e:
         print(f"Error during ffmpeg execution: {e}")
