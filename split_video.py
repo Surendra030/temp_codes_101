@@ -63,7 +63,6 @@ def split_video_main():
     # Main Script
     files = os.listdir()
     files_lst = [file for file in files if 'hardcoded.' in file and file.endswith(('.mp4', '.avi', '.mkv'))]  # Filter for video files
-    hardcoded_files = []
     folder_name_lst = []
     
     if len(files_lst) > 0:

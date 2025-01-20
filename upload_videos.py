@@ -29,14 +29,19 @@ def upload_hardcoded_videos_folders():
     try:
         deleted_all_videos(do_not_remove=False)
         
-        print(f'{30*"-"}')
-        print(os.listdir())
-        print(f'{30*"-"}')
+        print(f'{30*"*"}')
+        files_lst = os.listdir()
+        for index,i in enumerate(files_lst,start=1):
+            if index % 4 ==0:
+                print(i,end='\n')
+                continue
 
-        files = os.listdir()
+            print(i,end='\t')
+        print(f'{30*"*"}')
 
 
-        for file in files:
+
+        for file in files_lst:
 
             if '.zip' in file:
                                     

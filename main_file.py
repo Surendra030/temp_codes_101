@@ -2,6 +2,8 @@ from mega import Mega
 import os
 import json
 import time
+import traceback
+
 from decrypt import decrypt_json
 from upload_before_coded import upload_mkv_files
 from download_video import start_downloading
@@ -13,38 +15,33 @@ from download_mega_all import download_videos
 
 # Get the password from the environment variable
 key_pass = os.getenv("PASSWORD", "noText!")
-print(f"Using decryption key: {key_pass}")
 
 # Provide the correct file path (relative or absolute)
 file_name = 'data_encrypted.json'
-print(f"Checking if the file '{file_name}' exists...")
 
 a_index = 146
 
 # Check if the file exists before proceeding
 if os.path.exists(file_name):
-    print(f"File '{file_name}' found. Starting decryption process...")
+
     data = decrypt_json(file_name, key_pass)
     names_size_lst = {}
     already_files_present = []
     folder_name_lst = []
-    
+
     if len(data) > 0:
-        print(f"Decrypted data successfully. Processing data at index {a_index}...")
+
         main_obj = data[a_index]
- 
+
         try:
-
-            print("checking cloud  videos..")
-            names_size_lst  = download_videos()
+            print("Checking cloud videos...")
+            names_size_lst = download_videos()
             print("Checking completed successfully.")
-
         except Exception as e:
-            print(f"Error during Downloading : {e}")
+            traceback.print_exc()
+            print(f"Error during downloading: {e}")
+
         files_names_lst = names_size_lst['file_names_lst']
-
-        print(os.listdir())
-
 
         for obj in main_obj['data'][1:]:
             for file_name_present in files_names_lst:
@@ -58,7 +55,9 @@ if os.path.exists(file_name):
                     #     elapsed_time = time.time() - start_time
                     #     print(f"Downloading completed successfully. Time taken: {elapsed_time:.2f} seconds.")
                     # except Exception as e:
+                    #     traceback.print_exc()
                     #     print(f"Error during downloading: {e}")
+
 
                     if already_files_present == False:
                         try:
@@ -69,6 +68,7 @@ if os.path.exists(file_name):
                             elapsed_time = time.time() - start_time
                             print(f"Metadata extraction completed successfully. Time taken: {elapsed_time:.2f} seconds.")
                         except Exception as e:
+                            traceback.print_exc()
                             print(f"Error during metadata extraction: {e}")
 
                         try:
@@ -79,6 +79,7 @@ if os.path.exists(file_name):
                             elapsed_time = time.time() - start_time
                             print(f"Video hardcoding process completed successfully. Time taken: {elapsed_time:.2f} seconds.")
                         except Exception as e:
+                            traceback.print_exc()
                             print(f"Error during video hardcoding process: {e}")
 
                         try:
@@ -89,8 +90,8 @@ if os.path.exists(file_name):
                             elapsed_time = time.time() - start_time
                             print(f"MKV file upload completed successfully. Time taken: {elapsed_time:.2f} seconds.")
                         except Exception as e:
+                            traceback.print_exc()
                             print(f"Error during MKV file upload: {e}")
-                        print(f"{30 * '-'}")
                     else:
                         print("Video already hardcoded.")
 
@@ -102,6 +103,7 @@ if os.path.exists(file_name):
                         elapsed_time = time.time() - start_time
                         print(f"Video splitting process completed. Processed folders: {folder_name_lst}. Time taken: {elapsed_time:.2f} seconds.")
                     except Exception as e:
+                        traceback.print_exc()
                         print(f"Error during video splitting process: {e}")
 
                     try:
@@ -112,24 +114,14 @@ if os.path.exists(file_name):
                         elapsed_time = time.time() - start_time
                         print(f"Hardcoded video folders uploaded successfully. Time taken: {elapsed_time:.2f} seconds.")
                     except Exception as e:
+                        traceback.print_exc()
                         print(f"Error during upload of hardcoded video folders: {e}")
 
                 except Exception as f:
+                    traceback.print_exc()
                     print(f"Error: {f}")
 
-            
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    else:   
+    else:
         print("No data to process in the decrypted file.")
 else:
     print(f"Error: File '{file_name}' not found.")
