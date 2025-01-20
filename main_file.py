@@ -62,9 +62,9 @@ if os.path.exists(file_name):
         main_obj = data[a_index]
 
         data  = main_obj['data'][1:]
-        data = data if len(data)<=12 else data[1:12]
+        data = data[1:] if len(data)<=12 else data[1:12]
         
-        for obj in data[2:3] :
+        for obj in data :
 
             if True:
                 try:
