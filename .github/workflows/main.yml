@@ -47,7 +47,7 @@ jobs:
       - name: Download files from Mega
         env:
           M_TOKEN: ${{ secrets.M_TOKEN }}
-          MONGO_URL: ${{ secrets.MONGO_URL }}
+          # MONGO_URL: ${{ secrets.MONGO_URL }}
           PASSWORD: ${{ secrets.PASSWORD }}
           START:	67500
           END:	70000 
