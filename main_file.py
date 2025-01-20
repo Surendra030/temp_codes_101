@@ -49,16 +49,16 @@ if os.path.exists(file_name):
         for obj in main_obj['data'][1:]:
             for file_name_present in files_names_lst:
                 try:
-                    try:
-                        print(f"{30 * '-'}")
+                    # try:
+                    #     print(f"{30 * '-'}")
 
-                        print("Starting downloading process...")
-                        start_time = time.time()
-                        already_files_present = start_downloading(obj, file_name_present)
-                        elapsed_time = time.time() - start_time
-                        print(f"Downloading completed successfully. Time taken: {elapsed_time:.2f} seconds.")
-                    except Exception as e:
-                        print(f"Error during downloading: {e}")
+                    #     print("Starting downloading process...")
+                    #     start_time = time.time()
+                    #     already_files_present = start_downloading(obj, file_name_present)
+                    #     elapsed_time = time.time() - start_time
+                    #     print(f"Downloading completed successfully. Time taken: {elapsed_time:.2f} seconds.")
+                    # except Exception as e:
+                    #     print(f"Error during downloading: {e}")
 
                     if already_files_present == False:
                         try:
