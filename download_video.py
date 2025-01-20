@@ -36,7 +36,7 @@ def convert_size_to_bytes(size_str):
 
 
 
-def start_downloading(obj,file_name_present):
+def start_downloading(obj):
     # Example usage
 
 
@@ -50,15 +50,6 @@ def start_downloading(obj,file_name_present):
     file_size = title_splits[-1]
 
     file_name = sanitize_title(title)
-
-    temp_name = hardcoded_sanitize_folder(title)
-
-    temp_file_name = f"{temp_name.split(".")[0]}_hardcoded"
-
-    if temp_file_name in file_name_present:
-        return True
-
-
 
     expected_size = convert_size_to_bytes(file_size)
 
