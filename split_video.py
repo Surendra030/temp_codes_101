@@ -51,7 +51,6 @@ def split_video(file_path, segment_duration=5 * 60):
             subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         print(f"Video splitting completed for {file_path}!")
-        os.remove(file_path)
         return videos_folder
     except Exception as e:
         print(f"Error splitting video {file_path}: {e}")

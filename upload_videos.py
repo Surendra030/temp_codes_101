@@ -33,10 +33,10 @@ def upload_hardcoded_videos_folders():
         files_lst = os.listdir()
         for index,i in enumerate(files_lst,start=1):
             if index % 4 ==0:
-                print(i,end='\n')
+                print(i,end='\t')
                 continue
 
-            print(i,end='\t')
+            print(i,end='\n')
         print(f'{30*"*"}')
 
 
