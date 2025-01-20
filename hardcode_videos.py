@@ -147,7 +147,7 @@ def hardcode_all_videos():
             if f'index_{index}_audio' in file:
                 audio_files.append(file)
 
-            if f'index_{index}_subtitle' in file:
+            if f'.ass' in file or '.srt' in file:
                 sub_files.append(file)
                 
         # Get the last audio file if available
@@ -159,6 +159,7 @@ def hardcode_all_videos():
             # Sort by word count and get the file with the highest count
             s_file = max(subtitle_word_counts, key=subtitle_word_counts.get)
         else:
+            print("Using else case for subtitles files..\n",sub_files)
             s_file = sub_files[0]
 
         if s_file and a_file:

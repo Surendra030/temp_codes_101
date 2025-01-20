@@ -62,13 +62,14 @@ if os.path.exists(file_name):
         main_obj = data[a_index]
 
         data  = main_obj['data'][1:]
-        data = data if len(data)<=12 else data[:12]
+        data = data if len(data)<=12 else data[1:12]
         
-        for obj in data :
+        for obj in data[1:2] :
 
             if True:
                 try:
                     try:
+                        print("stage : 1")
                         print(f"{30 * '-'}")
 
                         print("Starting downloading process...")
@@ -83,6 +84,8 @@ if os.path.exists(file_name):
 
                     if already_files_present:
                         try:
+                            print("stage : 2")
+
                             print(f"{30 * '-'}")
                             print("Starting metadata extraction process...")
                             start_time = time.time()
@@ -94,6 +97,8 @@ if os.path.exists(file_name):
                             print(f"Error during metadata extraction: {e}")
 
                         try:
+                            print("stage : 3")
+
                             print(f"{30 * '-'}")
                             print("Starting video hardcoding process...")
                             start_time = time.time()
@@ -104,6 +109,9 @@ if os.path.exists(file_name):
                             traceback.print_exc()
                             print(f"Error during video hardcoding process: {e}")
                         try:
+
+                            print("stage : 4")
+
                             print(f"{30 * '-'}")
                             print("Starting upload of MKV files...")
                             start_time = time.time()
@@ -117,6 +125,8 @@ if os.path.exists(file_name):
                         print("Video already hardcoded.")
 
                     try:
+                        print("stage : 5")
+
                         print(f"{30 * '-'}")
                         print("Starting video splitting process...")
                         start_time = time.time()
@@ -128,6 +138,8 @@ if os.path.exists(file_name):
                         print(f"Error during video splitting process: {e}")
 
                     try:
+                        print("stage : 6")
+
                         print(f"{30 * '-'}")
                         print("Starting upload of hardcoded video folders...")
                         start_time = time.time()
