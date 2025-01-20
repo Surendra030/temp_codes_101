@@ -85,7 +85,7 @@ if os.path.exists(file_name):
 
                     try:
                         print("Starting video splitting process...")
-                        folder_name_lst = split_video_main()
+                        split_video_main()
                         print(f"Video splitting process completed. Processed folders: {folder_name_lst}")
                     except Exception as e:
                         print(f"Error during video splitting process: {e}")

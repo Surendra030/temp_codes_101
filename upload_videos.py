@@ -28,6 +28,11 @@ def deleted_all_videos(do_not_remove_final=True,do_not_remove=True):
 def upload_hardcoded_videos_folders():
     try:
         deleted_all_videos(do_not_remove=False)
+        
+        print(f'{30*"-"}')
+        print(os.listdir())
+        print(f'{30*"-"}')
+
         files = os.listdir()
         folder_name_lst = []
         for file in files:
@@ -59,7 +64,6 @@ def upload_hardcoded_videos_folders():
             except Exception as e:
                 print(f"Error processing folder '{folder_name}': {e}")
         
-        print("Hardcoded video folders uploaded successfully.")
     except Exception as e:
         print(f"Error during upload of hardcoded video folders: {e}")
 
