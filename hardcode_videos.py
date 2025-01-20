@@ -61,12 +61,11 @@ def hardcode_subtitles(video_path, subtitle_path, audio_path, output_path):
     if not os.path.exists(subtitle_path):
         print(f"Error: Subtitle file '{subtitle_path}' not found.")
         return False
-    srt_subtitle_path = f'{str(subtitle_path).split(".")[-1]}.srt'
     
-    if '.ass' in str(subtitle_path):
+    if '.ass' in str(subtitle_path) or '.srt' in str(subtitle_path) :
         # Generate the output SRT path (same as input subtitle path, but with .srt extension)
         
-        srt_subtitle_path = subtitle_path.rsplit('.', 1)[0] + '.srt'
+        srt_subtitle_path = str(subtitle_path).split('.')[0] + '.srt'
         
         # Step 1: Convert .ass to .srt
         print(f"Converting subtitle file {subtitle_path} to {srt_subtitle_path}...")

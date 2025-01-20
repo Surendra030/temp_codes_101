@@ -69,7 +69,7 @@ if os.path.exists(file_name):
             if True:
                 try:
                     try:
-                        print("stage : 1")
+                        print(f"{30 * '-'}\n stage : 1")
                         print(f"{30 * '-'}")
 
                         print("Starting downloading process...")
@@ -84,7 +84,7 @@ if os.path.exists(file_name):
 
                     if already_files_present:
                         try:
-                            print("stage : 2")
+                            print(f"{30 * '-'}\n stage : 2")
 
                             print(f"{30 * '-'}")
                             print("Starting metadata extraction process...")
@@ -97,7 +97,7 @@ if os.path.exists(file_name):
                             print(f"Error during metadata extraction: {e}")
 
                         try:
-                            print("stage : 3")
+                            print(f"{30 * '-'}\n stage : 3")
 
                             print(f"{30 * '-'}")
                             print("Starting video hardcoding process...")
@@ -110,7 +110,7 @@ if os.path.exists(file_name):
                             print(f"Error during video hardcoding process: {e}")
                         try:
 
-                            print("stage : 4")
+                            print(f"{30 * '-'}\n stage : 4")
 
                             print(f"{30 * '-'}")
                             print("Starting upload of MKV files...")
@@ -125,7 +125,7 @@ if os.path.exists(file_name):
                         print("Video already hardcoded.")
 
                     try:
-                        print("stage : 5")
+                        print(f"{30 * '-'}\n stage : 5")
 
                         print(f"{30 * '-'}")
                         print("Starting video splitting process...")
@@ -138,7 +138,7 @@ if os.path.exists(file_name):
                         print(f"Error during video splitting process: {e}")
 
                     try:
-                        print("stage : 6")
+                        print(f"{30 * '-'}\n stage : 6")
 
                         print(f"{30 * '-'}")
                         print("Starting upload of hardcoded video folders...")
