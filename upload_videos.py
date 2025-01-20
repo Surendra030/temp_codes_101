@@ -34,36 +34,20 @@ def upload_hardcoded_videos_folders():
         print(f'{30*"-"}')
 
         files = os.listdir()
-        folder_name_lst = []
+
+
         for file in files:
-            if 'do_not_remove_hardcoded_videos' in file:
-                folder_name_lst.append(file)
 
-        for folder_name in folder_name_lst:
-            print(folder_name)
+            if '.zip' in file:
+                                    
+                try:
+                    m.upload(file)
 
-            try:
-                # Create folder and get its handle
-                file = m.create_folder(folder_name)
-                if folder_name not in file:
-                    raise KeyError(f"Folder '{folder_name}' creation failed.")
-                f_h = file[folder_name]
-                files_in_folder = os.listdir(folder_name)
-                # Iterate through files in the folder and upload
-                for index,file_name in enumerate(files_in_folder):
-
-                    full_path = os.path.join(folder_name, file_name)
-                    
-                    try:
-                        m.upload(full_path, f_h)
-
-                        os.remove(full_path)
-                        print(f"file : {index} uploaded sucessfully.. ")
-                    except Exception as e:
-                        print(f"Error uploading/removing file '{file_name}': {e}")
-            except Exception as e:
-                print(f"Error processing folder '{folder_name}': {e}")
-        
+                    os.remove(file)
+                    print(f"file : {file} uploaded sucessfully.. ")
+                except Exception as e:
+                    print(f"Error uploading/removing file '{file}': {e}")
+ 
     except Exception as e:
         print(f"Error during upload of hardcoded video folders: {e}")
 

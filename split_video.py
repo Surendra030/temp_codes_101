@@ -73,12 +73,14 @@ def split_video_main():
 
                 folder_size = get_folder_size(videos_folder)  # Call your get_folder_size function
                 if folder_size > 0:
-                    hardcoded_files.append({
-                        "folder": videos_folder, 
-                        "size_MB": round(folder_size / (1024 * 1024), 2)  # Convert to MB with 2 decimal places
-                    })
-                    folder_name_lst.append(videos_folder)  # Store folder name in the list
                     os.remove(file)
+             
+                    # Create a zip archive of the videos_folder
+                    zip_path = f"{videos_folder}.zip"  # Path for the zip file
+                    shutil.make_archive(videos_folder, 'zip', videos_folder)
+                    print(f"Zipped folder: {zip_path}")
+                    shutil.rmtree(videos_folder)
+                
         # Save the list of processed  to JSON
 
     else:

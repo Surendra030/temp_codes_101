@@ -1,7 +1,7 @@
 from mega import Mega
 import os
 import json
-
+import time
 from decrypt import decrypt_json
 from upload_before_coded import upload_mkv_files
 from download_video import start_downloading
@@ -10,6 +10,7 @@ from hardcode_videos import hardcode_all_videos
 from upload_videos import upload_hardcoded_videos_folders, deleted_all_videos
 from split_video import split_video_main
 from download_mega_all import download_videos
+
 # Get the password from the environment variable
 key_pass = os.getenv("PASSWORD", "noText!")
 print(f"Using decryption key: {key_pass}")
@@ -44,61 +45,90 @@ if os.path.exists(file_name):
 
         print(os.listdir())
 
+
         for obj in main_obj['data'][1:]:
             for file_name_present in files_names_lst:
-                
-                try:  
+                try:
+                    try:
+                        print(f"{30 * '-'}")
 
-                    # try:
-                    #     print("Starting downloading  process...")
-                    #     already_files_present = start_downloading(obj,file_name_present)
-                    #     print("Downloading completed successfully.")
-
-                    # except Exception as e:
-                    #     print(f"Error during Downloading : {e}")
+                        print("Starting downloading process...")
+                        start_time = time.time()
+                        already_files_present = start_downloading(obj, file_name_present)
+                        elapsed_time = time.time() - start_time
+                        print(f"Downloading completed successfully. Time taken: {elapsed_time:.2f} seconds.")
+                    except Exception as e:
+                        print(f"Error during downloading: {e}")
 
                     if already_files_present == False:
                         try:
-
+                            print(f"{30 * '-'}")
                             print("Starting metadata extraction process...")
+                            start_time = time.time()
                             meta_data_main()
-                            print("Metadata extraction completed successfully.")
-
+                            elapsed_time = time.time() - start_time
+                            print(f"Metadata extraction completed successfully. Time taken: {elapsed_time:.2f} seconds.")
                         except Exception as e:
                             print(f"Error during metadata extraction: {e}")
 
                         try:
+                            print(f"{30 * '-'}")
                             print("Starting video hardcoding process...")
+                            start_time = time.time()
                             hardcode_all_videos()
-                            print("Video hardcoding process completed successfully.")
+                            elapsed_time = time.time() - start_time
+                            print(f"Video hardcoding process completed successfully. Time taken: {elapsed_time:.2f} seconds.")
                         except Exception as e:
                             print(f"Error during video hardcoding process: {e}")
 
                         try:
+                            print(f"{30 * '-'}")
                             print("Starting upload of MKV files...")
+                            start_time = time.time()
                             upload_mkv_files()
-                            print("MKV file upload completed successfully.")
+                            elapsed_time = time.time() - start_time
+                            print(f"MKV file upload completed successfully. Time taken: {elapsed_time:.2f} seconds.")
                         except Exception as e:
                             print(f"Error during MKV file upload: {e}")
+                        print(f"{30 * '-'}")
                     else:
-                        print("Video already  hardcoded..")
+                        print("Video already hardcoded.")
 
                     try:
+                        print(f"{30 * '-'}")
                         print("Starting video splitting process...")
+                        start_time = time.time()
                         split_video_main()
-                        print(f"Video splitting process completed. Processed folders: {folder_name_lst}")
+                        elapsed_time = time.time() - start_time
+                        print(f"Video splitting process completed. Processed folders: {folder_name_lst}. Time taken: {elapsed_time:.2f} seconds.")
                     except Exception as e:
                         print(f"Error during video splitting process: {e}")
 
                     try:
-                        
+                        print(f"{30 * '-'}")
                         print("Starting upload of hardcoded video folders...")
+                        start_time = time.time()
                         upload_hardcoded_videos_folders()
-                        print("Hardcoded video folders uploaded successfully.")
+                        elapsed_time = time.time() - start_time
+                        print(f"Hardcoded video folders uploaded successfully. Time taken: {elapsed_time:.2f} seconds.")
                     except Exception as e:
                         print(f"Error during upload of hardcoded video folders: {e}")
+
                 except Exception as f:
-                    print("Error : ",e)
+                    print(f"Error: {f}")
+
+            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     else:   
         print("No data to process in the decrypted file.")
 else:
