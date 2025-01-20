@@ -62,7 +62,10 @@ def hardcode_subtitles(video_path, subtitle_path, audio_path, output_path):
         print(f"Error: Subtitle file '{subtitle_path}' not found.")
         return False
     
-    if '.ass' in str(subtitle_path) or '.srt' in str(subtitle_path) :
+    if '.srt' in str(subtitle_path):
+        srt_subtitle_path = subtitle_path
+
+    if '.ass' in str(subtitle_path) or ('.srt' not in str(subtitle_path)) :
         # Generate the output SRT path (same as input subtitle path, but with .srt extension)
         
         srt_subtitle_path = str(subtitle_path).split('.')[0] + '.srt'
@@ -141,13 +144,18 @@ def hardcode_all_videos():
     for index,video in enumerate(video_file):
         audio_files = []
         sub_files = []
+        srt_sub_files = []
+
         for file in all_files:
-        # Collect audio and subtitle files for the current index
+
             if f'index_{index}_audio' in file:
                 audio_files.append(file)
 
-            if f'.ass' in file or '.srt' in file:
+            if f'.ass' in file:
                 sub_files.append(file)
+            
+            if  '.srt' in file:
+                srt_sub_files.append(file)
                 
         # Get the last audio file if available
         a_file = audio_files[-1] if len(audio_files) >= 1 else audio_files[0]
@@ -157,9 +165,12 @@ def hardcode_all_videos():
             subtitle_word_counts = {sub_file: count_words_in_file(sub_file) for sub_file in sub_files}
             # Sort by word count and get the file with the highest count
             s_file = max(subtitle_word_counts, key=subtitle_word_counts.get)
+        
         else:
             print("Using else case for subtitles files..\n",sub_files)
             s_file = sub_files[0]
+
+        if len(srt_sub_files)>0: s_file = srt_sub_files[-1]
 
         if s_file and a_file:
 
@@ -173,7 +184,8 @@ def hardcode_all_videos():
                         os.remove(sfile)
                     for afile in audio_files:
                         os.remove(afile)
-
+                    for srtf in srt_sub_files:
+                        os.remove(srtf)
                 except Exception as e:
                     print("Error ",e)   
         else:
