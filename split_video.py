@@ -62,7 +62,7 @@ def split_video(file_path, segment_duration=5 * 60):
 def split_video_main():
     # Main Script
     files = os.listdir()
-    files_lst = [file for file in files if 'hardcoded' in file and file.endswith(('.mp4', '.avi', '.mkv'))]  # Filter for video files
+    files_lst = [file for file in files if 'hardcoded.' in file and file.endswith(('.mp4', '.avi', '.mkv'))]  # Filter for video files
     hardcoded_files = []
     folder_name_lst = []
     

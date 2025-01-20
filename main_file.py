@@ -42,19 +42,21 @@ if os.path.exists(file_name):
             print(f"Error during Downloading : {e}")
         files_names_lst = names_size_lst['file_names_lst']
 
+        print(os.listdir())
+
         for obj in main_obj['data'][1:]:
             for file_name_present in files_names_lst:
                 
                 try:  
 
-                    try:
-                        print("Starting downloading  process...")
-                        already_files_present = start_downloading(obj,file_name_present)
-                        print("Downloading completed successfully.")
+                    # try:
+                    #     print("Starting downloading  process...")
+                    #     already_files_present = start_downloading(obj,file_name_present)
+                    #     print("Downloading completed successfully.")
 
-                    except Exception as e:
-                        print(f"Error during Downloading : {e}")
-                        
+                    # except Exception as e:
+                    #     print(f"Error during Downloading : {e}")
+
                     if already_files_present == False:
                         try:
 
