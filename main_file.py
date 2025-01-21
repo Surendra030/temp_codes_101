@@ -21,7 +21,7 @@ key_pass = os.getenv("PASSWORD", "noText!")
 # Provide the correct file path (relative or absolute)
 file_name = 'data_encrypted.json'
 
-a_index = 141
+a_index = 120
 
 def upload_links_json():
 
@@ -46,7 +46,6 @@ def upload_links_json():
     except Exception as e:
         print("Error : ",e)
 
-# upload_links_json()
 
 
 # Check if the file exists before proceeding
@@ -62,8 +61,8 @@ if os.path.exists(file_name):
         main_obj = data[a_index]
 
         data  = main_obj['data'][1:]
-        data = data[1:] if len(data)<=12 else data[1:12]
-        
+        data = data[1:] if len(data)<=12 else data[1:13]
+        print("Total videos to be processed : ",len(data))
         for obj in data :
 
             if True:
@@ -157,3 +156,5 @@ if os.path.exists(file_name):
         print("No data to process in the decrypted file.")
 else:
     print(f"Error: File '{file_name}' not found.")
+
+upload_links_json()

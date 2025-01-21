@@ -17,19 +17,25 @@ def upload_hardcoded_videos_folders():
         print(f'{30*"*"}')
 
 
-        folder_name = 'zip_files'
-        file = m.create_folder(folder_name)
+
+        zip_files = []
         for file_name in files_lst:
 
             if '.zip' in file_name:
-                print("Zip file found ")                 
-                try:
-                    m.upload(file_name,file[folder_name])
-                    print(f"file : {file_name} uploaded sucessfully.. ")
-                    os.remove(file_name)
-                except Exception as e:
-                    print(f"Error uploading file '{file}': {e}")
-            else: print("No zip files found.")
+                zip_files.append(file_name)
+
+        if len(zip_files)<=0: return None
+        
+        folder_name = 'zip_files'
+        file = m.create_folder(folder_name)
+        for file_name in zip_files:
+            try:
+                m.upload(file_name,file[folder_name])
+                print(f"file : {file_name} uploaded sucessfully.. ")
+                os.remove(file_name)
+            except Exception as e:
+                print(f"Error uploading file '{file}': {e}")
+
     except Exception as e:
         print(f"Error during upload of hardcoded video folders: {e}")
 
