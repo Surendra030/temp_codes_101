@@ -1,0 +1,57 @@
+name: Upload PDF to Mega Cloud
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allow the workflow to be triggered manually
+
+jobs:
+  download-files:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340  # Timeout after 1 hour (60 minutes)
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      # - name: Install Tesseract OCR
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install -y tesseract-ocr
+
+      # - name: Install Ghostscript
+      #   run: |
+      #     sudo apt install -y ghostscript
+
+      # - name: Install OCRmyPDF using pip
+      #   run: |
+      #     pip install ocrmypdf
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y poppler-utils
+          pip install -r req2.txt
+          pip install --upgrade tenacity
+        
+      # - name: Install FFmpeg
+      #   run: |
+      #     # Download the latest FFmpeg release for Ubuntu
+      #     sudo apt-get install -y ffmpeg
+          
+      - name: Download files from Mega
+        env:
+          M_TOKEN: ${{ secrets.M_TOKEN }}
+          # MONGO_URL: ${{ secrets.MONGO_URL }}
+          # PASSWORD: ${{ secrets.PASSWORD }}
+          START:	0
+          END:	70000 
+        run: |
+
+          python test.py
+          
