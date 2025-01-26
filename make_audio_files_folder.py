@@ -8,7 +8,7 @@ def get_video_duration(video_file):
 
     # Get media information
     info = mediainfo(video_file)
-
+ 
     # Extract and print the duration (in seconds)
     duration_in_seconds = int(float(info['duration']))  # Duration is provided in milliseconds
     return duration_in_seconds if duration_in_seconds else None
