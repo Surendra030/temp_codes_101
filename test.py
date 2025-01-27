@@ -12,7 +12,7 @@ links_lst = []
 for key,snippet in all_files:
     
     file_name= snippet['a']['n']
-    if '.pdf' in file_name:
+    if '.mp4' in file_name:
         try:
             
             link = m.export(file_name)
@@ -25,7 +25,7 @@ for key,snippet in all_files:
         }
         links_lst.append(obj)
 
-t = "pdf_links_data.json"
+t = "video_links_data.json"
 with open(t,'w',encoding='utf-8')as f:
     json.dump(links_lst,f,indent=4)
 
