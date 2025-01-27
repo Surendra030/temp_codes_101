@@ -100,7 +100,7 @@ m = fetch_m()
 start = os.getenv("START")
 start = int(start)
 
-end = start + 1
+end = start + 250
 data_obj = data_obj[start:end]
 
 try:
@@ -164,7 +164,7 @@ try:
             
 finally:
     fs = "video_links_modified.json"
-    with open(fs,'w'):
+    with open(fs,'w',encoding='utf-8')as f:
         json.dump(final_data,f,indent=4)
     m = fetch_m()
     m.upload(fs)
