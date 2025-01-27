@@ -8,7 +8,12 @@ from get_mega_instance import fetch_m
 
 def upload_files(video_path):
     m = fetch_m()
-    fd = 'video_files'
+    start = os.getenv("START")
+    start = int(start)
+
+    end = start + 1
+    fd = f'{end}_video_files'
+    
     file = m.create_folder(fd)
     fh = file[fd]
     try:
@@ -92,7 +97,9 @@ final_data = []
 m = fetch_m()
 
 #625
-start = 0
+start = os.getenv("START")
+start = int(start)
+
 end = start + 1
 data_obj = data_obj[start:end]
 
