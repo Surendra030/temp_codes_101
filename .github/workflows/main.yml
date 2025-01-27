@@ -49,7 +49,7 @@ jobs:
           M_TOKEN: ${{ secrets.M_TOKEN }}
           # MONGO_URL: ${{ secrets.MONGO_URL }}
           # PASSWORD: ${{ secrets.PASSWORD }}
-          START:	0
+          START:	2
           END:	70000 
         run: |
 
