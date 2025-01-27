@@ -102,7 +102,7 @@ try:
         try:
             fo_path = None
 
-            video_path = obj['file_name']
+            video_path = obj['fileName']
             link = obj['link']
             try:
                 m.download_url(link)
