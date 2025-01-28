@@ -46,10 +46,11 @@ jobs:
           
       - name: Download files from Mega
         env:
+        
           M_TOKEN: ${{ secrets.M_TOKEN }}
           # MONGO_URL: ${{ secrets.MONGO_URL }}
           # PASSWORD: ${{ secrets.PASSWORD }}
-          START:	130
+          START:	0
           END:	70000 
         run: |
 

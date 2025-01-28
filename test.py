@@ -100,7 +100,7 @@ m = fetch_m()
 start = os.getenv("START")
 start = int(start)
 
-end = start + 250
+end = start + 100
 data_obj = data_obj[start:end]
 
 try:
@@ -163,7 +163,7 @@ try:
                     os.remove(f)
             
 finally:
-    fs = "video_links_modified.json"
+    fs = f"{end}_video_links_modified.json"
     with open(fs,'w',encoding='utf-8')as f:
         json.dump(final_data,f,indent=4)
     m = fetch_m()
