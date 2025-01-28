@@ -39,10 +39,10 @@ jobs:
           pip install -r req2.txt
           pip install --upgrade tenacity
         
-      - name: Install FFmpeg
-        run: |
-          # Download the latest FFmpeg release for Ubuntu
-          sudo apt-get install -y ffmpeg
+      # - name: Install FFmpeg
+      #   run: |
+      #     # Download the latest FFmpeg release for Ubuntu
+      #     sudo apt-get install -y ffmpeg
           
       - name: Download files from Mega
         env:
@@ -54,5 +54,5 @@ jobs:
           END:	70000 
         run: |
 
-          python test.py
+          python t.py
           
