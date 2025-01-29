@@ -54,5 +54,5 @@ jobs:
           END:	70000 
         run: |
 
-          python t.py
+          python process.py
           

@@ -1,4 +1,5 @@
 mega.py
 selenium
 pydub
-gtts 
+gtts
+moviepy==1.0.3
