@@ -62,7 +62,7 @@ m = fetch_m()
 all_files = m.get_files().items()
 try:
         
-    for key,snippet in all_files():
+    for key,snippet in all_files:
         try:
             
             file_name = snippet['a']['n']
@@ -73,7 +73,7 @@ try:
             print("Error failed to download..")
             
 except Exception as e:
-    print("Errro : ",e)        
+    print("Errro 77 : ",e)        
 
 
 
@@ -112,10 +112,10 @@ finally:
             if os.path.exists(zip_filename):
                 m.upload(zip_filename)
         except Exception as e:
-            print("Error :",e)
+            print("Error 115 :",e)
         
     except Exception as e:
-        print(f"Error while handling files: {e}")
+        print(f"118 Error while handling files: {e}")
 
     try:
         with open(file_n, 'w', encoding='utf-8') as f:
@@ -123,5 +123,5 @@ finally:
         if os.path.exists(file_n):
             m.upload(file_n)
     except Exception as e:
-        print(f"Error while writing JSON file: {e}")
+        print(f" 126 Error while writing JSON file: {e}")
     
