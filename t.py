@@ -6,22 +6,33 @@ import subprocess
 import json
 from get_mega_instance import fetch_m
 
-final_lst = []
-fs = f"video_links_modified.json"
+
 m = fetch_m()
 
-all_files = m.get_files()
+all_files = m.get_files().items()
 
-for key,snippet in all_files.items():
-    file_name = snippet['a']['n']
-    if '.mp4' in file_name:
-        link = m.export(file_name)
-        final_lst.append({
-            'link':link,
-            'file_name':file_name
-        })
+lst = []
+try:
+        
+    for key,snippet in all_files:
+        
+        fle_name=snippet['a']['n']
+        if '.pdf' in fle_name:
+            try:
+                
+                fobj = m.find(fle_name)
+                link = m.export(fobj)
+            except Exception as e:
+                print("error : ",e)
+            obj ={
+                "file_name":fle_name,
+                "link":link
+            }
+            lst.append(obj)
 
-
-with open(fs,'w',encoding='utf-8')as f:
-    json.dump(final_lst,f,indent=4)
-m.upload(fs)
+finally:
+    
+    with open("temp.json",'w')as f:
+        json.dump(lst,f,indent=4)
+    ms = fetch_m()
+    ms.upload("temp.json")
