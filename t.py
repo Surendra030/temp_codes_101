@@ -16,8 +16,8 @@ try:
         if '.pdf' in fle_name:
             try:
                 
-                fobj = m.find(fle_name)
-                link = m.export(fobj)
+                
+                link = m.export(fle_name)
                 obj ={
                 "file_name":fle_name,
                 "link":link
