@@ -22,13 +22,14 @@ try:
                 
                 fobj = m.find(fle_name)
                 link = m.export(fobj)
-            except Exception as e:
-                print("error : ",e)
-            obj ={
+                obj ={
                 "file_name":fle_name,
                 "link":link
             }
-            lst.append(obj)
+                lst.append(obj)
+            except Exception as e:
+                print("error : ",e)
+
 
 finally:
     
