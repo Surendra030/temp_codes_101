@@ -11,7 +11,8 @@ def fetch_m():
 def fetch_df(num):
         
     keys = 'afg154010@gmail.com_megaMac02335!'.split("_")
-    mega = Mega()
+    mega = Mega() 
+    num = f'{num}@'
     keys[0] = keys[0].replace('10@',num)
     m = mega.login(keys[0],keys[1])
 
